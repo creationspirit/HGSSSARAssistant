@@ -1,0 +1,12 @@
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\bin\Debug\netcoreapp2.0\HGSSSARAssistant.deps.json
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\bin\Debug\netcoreapp2.0\HGSSSARAssistant.runtimeconfig.json
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\bin\Debug\netcoreapp2.0\HGSSSARAssistant.runtimeconfig.dev.json
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\bin\Debug\netcoreapp2.0\HGSSSARAssistant.dll
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\bin\Debug\netcoreapp2.0\HGSSSARAssistant.pdb
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.csprojResolveAssemblyReference.cache
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.csproj.CoreCompileInputs.cache
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.AssemblyInfoInputs.cache
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.AssemblyInfo.cs
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.dll
+C:\Users\nameless\Documents\Visual Studio 2017\Projects\HGSSSARAssistant\HGSSSARAssistant\obj\Debug\netcoreapp2.0\HGSSSARAssistant.pdb
