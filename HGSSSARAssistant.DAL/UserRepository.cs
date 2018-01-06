@@ -7,6 +7,8 @@ namespace HGSSSARAssistant.DAL
 {
     public class UserRepository : DbContext, IUserRepository
     {
+        public DbSet<HGSSSARAssistant.Core.User> Users { get; set; }
+
         public UserRepository(DbContextOptions<UserRepository> options)
             : base(options)
         { }

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace HGSSSARAssistant.Core
 {
-    public class Expertise
+    public class Expertise : Entity
     {
         public String Name { get; set; }
     }
