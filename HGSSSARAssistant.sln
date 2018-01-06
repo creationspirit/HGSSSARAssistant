@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.DAL", "HGS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.Web", "HGSSSARAssistant.Web\HGSSSARAssistant.Web.csproj", "{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.BLL", "HGSSSARAssistant.BLL\HGSSSARAssistant.BLL.csproj", "{37A01404-330B-4147-B80F-7CCC13048EDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37A01404-330B-4147-B80F-7CCC13048EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A01404-330B-4147-B80F-7CCC13048EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A01404-330B-4147-B80F-7CCC13048EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A01404-330B-4147-B80F-7CCC13048EDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
