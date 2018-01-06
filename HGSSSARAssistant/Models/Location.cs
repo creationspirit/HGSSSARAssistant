@@ -9,7 +9,7 @@ namespace HGSSSARAssistant.Models
     {
         public long ID { get; set; }
         public decimal Latitude { get; set; }
-        public decimal Magnitude { get; set; }
+        public decimal Longitude { get; set; }
         public String Title { get; set; }
         public String Description { get; set; }
     }
