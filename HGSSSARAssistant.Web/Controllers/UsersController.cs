@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HGSSSARAssistant.Core;
-using HGSSSARAssistant.DAL.EF;
-using HGSSSARAssistant.Core.Repositories;
+
+using HGSSSARAssistant.BLL;
+using HGSSSARAssistant.BLL.BusinessEntities;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly IUserRepository _context;
+        private readonly UserBLL _context;
 
-        public UsersController(IUserRepository context)
+        public UsersController(UserBLL context)
         {
             _context = context;
         }
@@ -23,7 +18,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            return View(_context.GetAvailableUsers(new DateTime()));
+            return View(_context.GetAllUsers());
         }
 
         // GET: Users/Details/5
@@ -140,8 +135,7 @@ namespace HGSSSARAssistant.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            var user = _context.GetUserById((long) id);
-            _context.DeleteUser(user);
+            _context.DeleteUser(id);
             return RedirectToAction(nameof(Index));
         }
 

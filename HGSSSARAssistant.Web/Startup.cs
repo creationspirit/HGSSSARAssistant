@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using HGSSSARAssistant.DAL.EF;
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.DAL;
+using HGSSSARAssistant.BLL;
 
 namespace HGSSSARAssistant.Web
 {
@@ -26,7 +27,7 @@ namespace HGSSSARAssistant.Web
             var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
             services.AddEntityFrameworkNpgsql().AddDbContext<UserContext>(options => options.UseNpgsql(connection));
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<UserBLL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

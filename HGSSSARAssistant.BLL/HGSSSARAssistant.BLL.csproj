@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HGSSSARAssistant.Core\HGSSSARAssistant.Core.csproj" />
+    <ProjectReference Include="..\HGSSSARAssistant.DAL\HGSSSARAssistant.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

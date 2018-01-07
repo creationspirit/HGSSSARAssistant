@@ -35,9 +35,21 @@ namespace HGSSSARAssistant.DAL
             _context.SaveChanges();
         }
 
+        public void DeleteUser(long id)
+        {
+            User user = this.GetUserById(id);
+            _userEntity.Remove(user);
+            _context.SaveChanges();
+        }
+
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            return _userEntity.AsEnumerable();
         }
 
         public IEnumerable<User> GetAvailableUsers(DateTime time)
@@ -57,27 +69,27 @@ namespace HGSSSARAssistant.DAL
 
         public IEnumerable<User> GetUsersByCategory(Category category)
         {
-            return (from user in _userEntity where user.Category.Id == category.Id select user);
+            return _userEntity.Where(user => user.Category.Equals(category));
         }
 
         public IEnumerable<User> GetUsersByExpertise(Expertise expertise)
         {
-            return (from user in _userEntity where user.Expertise.Contains(expertise) select user);
+            return _userEntity.Where(user => user.Expertise.Contains(expertise));
         }
 
         public IEnumerable<User> GetUsersByName(string name)
         {
-            return (from user in _userEntity where user.FirstName.Equals(name) || user.LastName.Equals(name) select user);
+            return _userEntity.Where(user => user.FirstName.Equals(name) || user.LastName.Equals(name));
         }
 
         public IEnumerable<User> GetUsersByRole(Role role)
         {
-            return (from user in _userEntity where user.Role.Id == role.Id select user);
+            return _userEntity.Where(user => user.Role.Equals(role));
         }
 
         public IEnumerable<User> GetUsersByStation(Station station)
         {
-            return (from user in _userEntity where user.Station.Id == station.Id select user);
+            return _userEntity.Where(user => user.Station.Equals(station));            
         }
 
         public User UpdateUser(User user)
@@ -86,6 +98,11 @@ namespace HGSSSARAssistant.DAL
             _context.SaveChanges();
 
             return updatedUser;
+        }
+
+        public bool UserExists(long id)
+        {
+            return _userEntity.Any(user => user.Id == id);
         }
     }
 }
