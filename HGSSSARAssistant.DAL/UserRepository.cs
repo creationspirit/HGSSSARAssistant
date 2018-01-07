@@ -1,71 +1,91 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using HGSSSARAssistant.Core;
+﻿using HGSSSARAssistant.Core;
 using HGSSSARAssistant.Core.Repositories;
+using System;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using HGSSSARAssistant.DAL.EF;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 
 namespace HGSSSARAssistant.DAL
 {
-    public class UserRepository : DbContext, IUserRepository
+    public class UserRepository : IUserRepository, IDisposable
     {
-        public DbSet<HGSSSARAssistant.Core.User> Users { get; set; }
+        private UserContext _context;
 
-        public UserRepository(DbContextOptions<UserRepository> options)
-            : base(options)
-        { }
+        private DbSet<HGSSSARAssistant.Core.User> _userEntity;
+
+        public UserRepository(UserContext context)
+        {
+            this._context = context;
+            this._userEntity = context.Set<HGSSSARAssistant.Core.User>();
+        }
 
         public void AddUser(User user)
         {
-            throw new NotImplementedException();
+            _userEntity.Add(user);
+            _context.SaveChanges();
         }
 
         public void DeleteUser(User user)
         {
-            throw new NotImplementedException();
+            _userEntity.Remove(user);
+            _context.SaveChanges();
         }
 
-        public User[] GetAvailableUsers(DateTime time)
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            _context.Dispose();
         }
 
-        public User[] GetAvailableUsers(Availability availability)
+        public IEnumerable<User> GetAvailableUsers(DateTime time)
         {
-            throw new NotImplementedException();
+            return _userEntity.AsEnumerable();
+        }
+
+        public IEnumerable<User> GetAvailableUsers(Availability availability)
+        {
+            return _userEntity.AsEnumerable();
         }
 
         public User GetUserById(long id)
         {
-            throw new NotImplementedException();
+            return _userEntity.SingleOrDefaultAsync(user => user.Id == id).Result;
         }
 
-        public User[] GetUsersByCategory(Category category)
+        public IEnumerable<User> GetUsersByCategory(Category category)
         {
-            throw new NotImplementedException();
+            return (from user in _userEntity where user.Category.Id == category.Id select user);
         }
 
-        public User[] GetUsersByExpertise(Expertise expertise)
+        public IEnumerable<User> GetUsersByExpertise(Expertise expertise)
         {
-            throw new NotImplementedException();
+            return (from user in _userEntity where user.Expertise.Contains(expertise) select user);
         }
 
-        public User[] GetUsersByName(string name)
+        public IEnumerable<User> GetUsersByName(string name)
         {
-            throw new NotImplementedException();
+            return (from user in _userEntity where user.FirstName.Equals(name) || user.LastName.Equals(name) select user);
         }
 
-        public User[] GetUsersByRole(Role role)
+        public IEnumerable<User> GetUsersByRole(Role role)
         {
-            throw new NotImplementedException();
+            return (from user in _userEntity where user.Role.Id == role.Id select user);
         }
 
-        public User[] GetUsersByStation(Station station)
+        public IEnumerable<User> GetUsersByStation(Station station)
         {
-            throw new NotImplementedException();
+            return (from user in _userEntity where user.Station.Id == station.Id select user);
         }
 
-        public void UpdateUser(User user)
+        public User UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            User updatedUser = _userEntity.Update(user).Entity;
+            _context.SaveChanges();
+
+            return updatedUser;
         }
     }
 }

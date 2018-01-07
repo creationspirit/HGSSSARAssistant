@@ -1,19 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.WebOld", "HGSSSARAssistant\HGSSSARAssistant.WebOld.csproj", "{8408A37D-F259-4588-AF68-EAD70F7C119F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HGSSSARAssistant.Core", "HGSSSARAssistant.Core\HGSSSARAssistant.Core.csproj", "{EF538489-00F1-414F-910C-3119C048BFDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.Core", "HGSSSARAssistant.Core\HGSSSARAssistant.Core.csproj", "{EF538489-00F1-414F-910C-3119C048BFDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HGSSSARAssistant.Api", "HGSSSARAssistant.Api\HGSSSARAssistant.Api.csproj", "{9E51634D-737E-4669-A632-DF7384BD942F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.Api", "HGSSSARAssistant.Api\HGSSSARAssistant.Api.csproj", "{9E51634D-737E-4669-A632-DF7384BD942F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HGSSSARAssistant.DAL", "HGSSSARAssistant.DAL\HGSSSARAssistant.DAL.csproj", "{88FF1DAE-C2ED-4F3E-9E5E-0F366080F0D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.DAL", "HGSSSARAssistant.DAL\HGSSSARAssistant.DAL.csproj", "{88FF1DAE-C2ED-4F3E-9E5E-0F366080F0D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HGSSSARAssistant.Web", "HGSSSARAssistant.Web\HGSSSARAssistant.Web.csproj", "{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.Web", "HGSSSARAssistant.Web\HGSSSARAssistant.Web.csproj", "{2EDD60C8-299E-43A4-83D1-AE9328D1D2DA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HGSSSARAssistant.BLL", "HGSSSARAssistant.BLL\HGSSSARAssistant.BLL.csproj", "{37A01404-330B-4147-B80F-7CCC13048EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HGSSSARAssistant.BLL", "HGSSSARAssistant.BLL\HGSSSARAssistant.BLL.csproj", "{37A01404-330B-4147-B80F-7CCC13048EDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8408A37D-F259-4588-AF68-EAD70F7C119F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8408A37D-F259-4588-AF68-EAD70F7C119F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8408A37D-F259-4588-AF68-EAD70F7C119F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8408A37D-F259-4588-AF68-EAD70F7C119F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF538489-00F1-414F-910C-3119C048BFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF538489-00F1-414F-910C-3119C048BFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF538489-00F1-414F-910C-3119C048BFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HGSSSARAssistant.DAL;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using HGSSSARAssistant.DAL.EF;
+using HGSSSARAssistant.Core.Repositories;
+using HGSSSARAssistant.DAL;
 
 namespace HGSSSARAssistant.Web
 {
@@ -25,8 +23,10 @@ namespace HGSSSARAssistant.Web
         {
             services.AddMvc();
 
-            var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;User Id=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
-            services.AddEntityFrameworkNpgsql().AddDbContext<UserRepository>(options => options.UseNpgsql(connection));
+            var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
+            services.AddEntityFrameworkNpgsql().AddDbContext<UserContext>(options => options.UseNpgsql(connection));
+
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

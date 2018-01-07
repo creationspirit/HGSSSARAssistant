@@ -6,35 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
-using HGSSSARAssistant.DAL;
+using HGSSSARAssistant.DAL.EF;
+using HGSSSARAssistant.Core.Repositories;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserRepository _context;
+        private readonly IUserRepository _context;
 
-        public UsersController(UserRepository context)
+        public UsersController(IUserRepository context)
         {
             _context = context;
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(_context.GetAvailableUsers(new DateTime()));
         }
 
         // GET: Users/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public ActionResult Details(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var user = _context.GetUserById((long) id);
+
             if (user == null)
             {
                 return NotFound();
@@ -54,26 +55,27 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Address,ContactNumber,AdditionalContactNumbers,IsAvailable,Id")] User user)
+        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                _context.AddUser(user);
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
         }
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        public ActionResult Edit(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.SingleOrDefaultAsync(m => m.Id == id);
+            var user = _context.GetUserById((long)id);
+            user = _context.UpdateUser(user);
+
             if (user == null)
             {
                 return NotFound();
@@ -86,7 +88,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("FirstName,LastName,Address,ContactNumber,AdditionalContactNumbers,IsAvailable,Id")] User user)
+        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] User user)
         {
             if (id != user.Id)
             {
@@ -97,8 +99,7 @@ namespace HGSSSARAssistant.Web.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    user = _context.UpdateUser(user);   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,15 +118,15 @@ namespace HGSSSARAssistant.Web.Controllers
         }
 
         // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        public ActionResult Delete(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var user = _context.GetUserById((long) id);
+
             if (user == null)
             {
                 return NotFound();
@@ -137,17 +138,18 @@ namespace HGSSSARAssistant.Web.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public ActionResult DeleteConfirmed(long id)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var user = _context.GetUserById((long) id);
+            _context.DeleteUser(user);
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(long id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            var user = _context.GetUserById((long)id);
+
+            return user != null;
         }
     }
 }

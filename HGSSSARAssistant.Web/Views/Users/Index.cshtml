@@ -23,13 +23,22 @@
                     @Html.DisplayNameFor(model => model.Address)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AndroidPushId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Password)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PasswordSalt)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ContactNumber)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.AdditionalContactNumbers)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsAvailable)
                 </th>
             <th></th>
         </tr>
@@ -47,13 +56,22 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AndroidPushId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PasswordSalt)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ContactNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AdditionalContactNumbers)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
