@@ -8,8 +8,6 @@ namespace HGSSSARAssistant.Core
         public String Address { get; set; }
         public String ContactNumber { get; set; }
         public String AdditionalContactNumbers { get; set; }
-        public bool IsAvailable { get; set; }
-
         public Station Station { get; set; }
         public Category Category { get; set; }
         public Role Role { get; set; }
