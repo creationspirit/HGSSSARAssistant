@@ -6,9 +6,9 @@ using System.Text;
 
 namespace HGSSSARAssistant.DAL.EF
 {
-    public class UserContext : DbContext
+    public class ApplicationContext : DbContext
     {
-        public UserContext(DbContextOptions options) : base(options)
+        public ApplicationContext(DbContextOptions options) : base(options)
         {
         }
 

@@ -10,7 +10,7 @@ using System;
 
 namespace HGSSSARAssistant.DAL.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(ApplicationContext))]
     [Migration("20180107181743_InitialCreate")]
     partial class InitialCreate
     {

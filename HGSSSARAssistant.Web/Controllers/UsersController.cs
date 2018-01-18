@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-using HGSSSARAssistant.BLL;
-using HGSSSARAssistant.BLL.BusinessEntities;
+using HGSSSARAssistant.DAL;
+using HGSSSARAssistant.Web.Models;
+using HGSSSARAssistant.Core;
+using System.Collections.Generic;
+using HGSSSARAssistant.Core.Repositories;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserBLL _context;
+        private readonly IUserRepository _context;
 
-        public UsersController(UserBLL context)
+        public UsersController(IUserRepository context)
         {
             _context = context;
         }
@@ -18,25 +20,29 @@ namespace HGSSSARAssistant.Web.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            return View(_context.GetAllUsers());
+            List<UserViewModel> model = new List<UserViewModel>();
+            foreach (User u in _context.GetAll())
+            {
+                UserViewModel userModel = ConvertToViewModel(u);
+                model.Add(userModel);
+            }
+
+            return View(model);
         }
 
         // GET: Users/Details/5
-        public ActionResult Details(long? id)
+        public ActionResult Details(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.GetUserById((long) id);
+            var user = _context.GetById(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            var userModel = ConvertToViewModel(user);
+
+            return View(userModel);
         }
 
         // GET: Users/Create
@@ -50,32 +56,34 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] User user)
+        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
-                _context.AddUser(user);
+                var user = ConvertToModel(userModel);
+
+                _context.Insert(user);
+                _context.Save();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+
+            ModelState.AddModelError("", "Invalid user data.");
+            return View(userModel);
         }
 
         // GET: Users/Edit/5
-        public ActionResult Edit(long? id)
+        public ActionResult Edit(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.GetUserById((long)id);
-            user = _context.UpdateUser(user);
+            var user = _context.GetById(id);
 
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+
+            UserViewModel userModel = ConvertToViewModel(user);
+
+            return View(userModel);
         }
 
         // POST: Users/Edit/5
@@ -83,9 +91,9 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] User user)
+        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
         {
-            if (id != user.Id)
+            if (id != userModel.Id)
             {
                 return NotFound();
             }
@@ -94,11 +102,14 @@ namespace HGSSSARAssistant.Web.Controllers
             {
                 try
                 {
-                    user = _context.UpdateUser(user);   
+                    var user = ConvertToModel(userModel);
+
+                    _context.Update(user);
+                    _context.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!UserExists(userModel.Id))
                     {
                         return NotFound();
                     }
@@ -109,19 +120,13 @@ namespace HGSSSARAssistant.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(userModel);
         }
 
         // GET: Users/Delete/5
-        public ActionResult Delete(long? id)
+        public ActionResult Delete(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = _context.GetUserById((long) id);
-
+            var user = _context.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -135,15 +140,50 @@ namespace HGSSSARAssistant.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            _context.DeleteUser(id);
+            _context.Delete(id);
+            _context.Save();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(long id)
         {
-            var user = _context.GetUserById((long)id);
+            return _context.Exists(id);
+        }
 
-            return user != null;
+        private User ConvertToModel(UserViewModel userModel)
+        {
+            User user = new User
+            {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Address = userModel.Address,
+                Email = userModel.Email,
+                AndroidPushId = userModel.AndroidPushId,
+                Password = userModel.Password,
+                PasswordSalt = userModel.PasswordSalt,
+                ContactNumber = userModel.ContactNumber,
+                AdditionalContactNumbers = userModel.AdditionalContactNumbers
+            };
+
+            return user;
+        }
+
+        private UserViewModel ConvertToViewModel(User user)
+        {
+            var userModel = new UserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+                Email = user.Email,
+                AndroidPushId = user.AndroidPushId,
+                Password = user.Password,
+                PasswordSalt = user.PasswordSalt,
+                ContactNumber = user.ContactNumber,
+                AdditionalContactNumbers = user.AdditionalContactNumbers
+            };
+
+            return userModel;
         }
     }
 }

@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HGSSSARAssistant.BLL\HGSSSARAssistant.BLL.csproj" />
     <ProjectReference Include="..\HGSSSARAssistant.DAL\HGSSSARAssistant.DAL.csproj" />
   </ItemGroup>
 </Project>

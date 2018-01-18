@@ -11,45 +11,21 @@ using System.Linq;
 
 namespace HGSSSARAssistant.DAL
 {
-    public class UserRepository : IUserRepository, IDisposable
+    public class UserRepository : Repository<User>, IUserRepository, IDisposable
     {
-        private UserContext _context;
+        private ApplicationContext _context;
 
         private DbSet<HGSSSARAssistant.Core.User> _userEntity;
 
-        public UserRepository(UserContext context)
+        public UserRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
             this._userEntity = context.Set<HGSSSARAssistant.Core.User>();
         }
 
-        public void AddUser(User user)
-        {
-            _userEntity.Add(user);
-            _context.SaveChanges();
-        }
-
-        public void DeleteUser(User user)
-        {
-            _userEntity.Remove(user);
-            _context.SaveChanges();
-        }
-
-        public void DeleteUser(long id)
-        {
-            User user = this.GetUserById(id);
-            _userEntity.Remove(user);
-            _context.SaveChanges();
-        }
-
         public void Dispose()
         {
             _context.Dispose();
-        }
-
-        public IEnumerable<User> GetAllUsers()
-        {
-            return _userEntity.AsEnumerable();
         }
 
         public IEnumerable<User> GetAvailableUsers(DateTime time)
@@ -62,10 +38,6 @@ namespace HGSSSARAssistant.DAL
             return _userEntity.AsEnumerable();
         }
 
-        public User GetUserById(long id)
-        {
-            return _userEntity.SingleOrDefaultAsync(user => user.Id == id).Result;
-        }
 
         public IEnumerable<User> GetUsersByCategory(Category category)
         {
@@ -90,19 +62,6 @@ namespace HGSSSARAssistant.DAL
         public IEnumerable<User> GetUsersByStation(Station station)
         {
             return _userEntity.Where(user => user.Station.Equals(station));            
-        }
-
-        public User UpdateUser(User user)
-        {
-            User updatedUser = _userEntity.Update(user).Entity;
-            _context.SaveChanges();
-
-            return updatedUser;
-        }
-
-        public bool UserExists(long id)
-        {
-            return _userEntity.Any(user => user.Id == id);
         }
     }
 }
