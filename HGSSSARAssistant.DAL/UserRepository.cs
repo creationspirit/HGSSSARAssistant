@@ -3,10 +3,7 @@ using HGSSSARAssistant.Core.Repositories;
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using HGSSSARAssistant.DAL.EF;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
 
 namespace HGSSSARAssistant.DAL
@@ -15,12 +12,12 @@ namespace HGSSSARAssistant.DAL
     {
         private ApplicationContext _context;
 
-        private DbSet<HGSSSARAssistant.Core.User> _userEntity;
+        private DbSet<User> _userEntity;
 
         public UserRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
-            this._userEntity = context.Set<HGSSSARAssistant.Core.User>();
+            this._userEntity = context.Set<User>();
         }
 
         public void Dispose()

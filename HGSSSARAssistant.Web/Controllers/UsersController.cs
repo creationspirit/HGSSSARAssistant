@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HGSSSARAssistant.DAL;
 using HGSSSARAssistant.Web.Models;
 using HGSSSARAssistant.Core;
 using System.Collections.Generic;
@@ -12,9 +11,12 @@ namespace HGSSSARAssistant.Web.Controllers
     {
         private readonly IUserRepository _context;
 
-        public UsersController(IUserRepository context)
+        private readonly IStationRepository _stationRepository;
+
+        public UsersController(IUserRepository context, IStationRepository stationRepository)
         {
             _context = context;
+            _stationRepository = stationRepository;
         }
 
         // GET: Users
@@ -48,6 +50,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewBag.StationList = new List<Station>(_stationRepository.GetAll());
             return View();
         }
 
@@ -56,7 +59,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
+        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Station,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +71,7 @@ namespace HGSSSARAssistant.Web.Controllers
             }
 
             ModelState.AddModelError("", "Invalid user data.");
+            ViewBag.StationList = new List<Station>(_stationRepository.GetAll());
             return View(userModel);
         }
 
@@ -127,12 +131,15 @@ namespace HGSSSARAssistant.Web.Controllers
         public ActionResult Delete(long id)
         {
             var user = _context.GetById(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            UserViewModel userModel = ConvertToViewModel(user);
+
+            return View(userModel);
         }
 
         // POST: Users/Delete/5
@@ -154,6 +161,7 @@ namespace HGSSSARAssistant.Web.Controllers
         {
             User user = new User
             {
+                Id = userModel.Id,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
                 Address = userModel.Address,
@@ -162,7 +170,8 @@ namespace HGSSSARAssistant.Web.Controllers
                 Password = userModel.Password,
                 PasswordSalt = userModel.PasswordSalt,
                 ContactNumber = userModel.ContactNumber,
-                AdditionalContactNumbers = userModel.AdditionalContactNumbers
+                AdditionalContactNumbers = userModel.AdditionalContactNumbers,
+                Station = userModel.Station == null ? null : _stationRepository.GetById(userModel.Station.Id)
             };
 
             return user;
@@ -172,6 +181,7 @@ namespace HGSSSARAssistant.Web.Controllers
         {
             var userModel = new UserViewModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Address = user.Address,
@@ -180,7 +190,12 @@ namespace HGSSSARAssistant.Web.Controllers
                 Password = user.Password,
                 PasswordSalt = user.PasswordSalt,
                 ContactNumber = user.ContactNumber,
-                AdditionalContactNumbers = user.AdditionalContactNumbers
+                AdditionalContactNumbers = user.AdditionalContactNumbers,
+                Station = user.Station == null ? null : new StationViewModel
+                {
+                    Id = user.Station.Id,
+                    Name = user.Station.Name
+                }
             };
 
             return userModel;

@@ -6,7 +6,6 @@ namespace HGSSSARAssistant.Core
         public String Name { get; set; }
         public String Description { get; set; }
         public DateTime MeetupTime { get; set; }
-
         public User Leader { get; set; }
         public User[] InvitedRescuers { get; set; }
         public User[] AttendedRescuers { get; set; }

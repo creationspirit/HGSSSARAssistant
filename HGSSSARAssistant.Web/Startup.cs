@@ -26,10 +26,17 @@ namespace HGSSSARAssistant.Web
             var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection));
 
-            //services.AddScoped<UserRepository>();
-            //services.AddSingleton<IUserRepository, UserRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IStationRepository, StationRepository>();
+            services.AddTransient<IRoleRepository, RoleRepository>();
+            services.AddTransient<IActionRepository, ActionRepository>();
+            services.AddTransient<IActionTypeRepository, ActionTypeRepository>();
+            services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IExpertiseRepository, ExpertiseRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddTransient<IMessageTemplateRepository, MessageTemplateRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

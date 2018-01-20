@@ -11,14 +11,53 @@ using System;
 namespace HGSSSARAssistant.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20180120123917_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.Action", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long?>("ActionTypeId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<long?>("LeaderId");
+
+                    b.Property<long?>("LocationId");
+
+                    b.Property<DateTime>("MeetupTime");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActionTypeId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Actions");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.ActionType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActionTypes");
+                });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Availability", b =>
                 {
@@ -35,7 +74,7 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Availability");
+                    b.ToTable("Availabilities");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Category", b =>
@@ -45,7 +84,7 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Expertise", b =>
@@ -61,7 +100,7 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Expertise");
+                    b.ToTable("Expertises");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Location", b =>
@@ -79,7 +118,19 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.MessageTemplate", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MessageTemplates");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Role", b =>
@@ -87,9 +138,11 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Name");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Station", b =>
@@ -105,13 +158,17 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Station");
+                    b.ToTable("Stations");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<long?>("ActionId");
+
+                    b.Property<long?>("ActionId1");
 
                     b.Property<string>("AdditionalContactNumbers");
 
@@ -141,6 +198,10 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ActionId");
+
+                    b.HasIndex("ActionId1");
+
                     b.HasIndex("AvailabilityId");
 
                     b.HasIndex("CategoryId");
@@ -150,6 +211,21 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.HasIndex("StationId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.Action", b =>
+                {
+                    b.HasOne("HGSSSARAssistant.Core.ActionType", "ActionType")
+                        .WithMany()
+                        .HasForeignKey("ActionTypeId");
+
+                    b.HasOne("HGSSSARAssistant.Core.User", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId");
+
+                    b.HasOne("HGSSSARAssistant.Core.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Availability", b =>
@@ -175,6 +251,14 @@ namespace HGSSSARAssistant.DAL.Migrations
 
             modelBuilder.Entity("HGSSSARAssistant.Core.User", b =>
                 {
+                    b.HasOne("HGSSSARAssistant.Core.Action")
+                        .WithMany("AttendedRescuers")
+                        .HasForeignKey("ActionId");
+
+                    b.HasOne("HGSSSARAssistant.Core.Action")
+                        .WithMany("InvitedRescuers")
+                        .HasForeignKey("ActionId1");
+
                     b.HasOne("HGSSSARAssistant.Core.Availability", "Availability")
                         .WithMany()
                         .HasForeignKey("AvailabilityId");

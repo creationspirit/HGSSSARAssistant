@@ -1,4 +1,4 @@
-﻿@model HGSSSARAssistant.Web.Models.UserViewModel
+﻿@model UserViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -41,12 +41,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.AndroidPushId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Password)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PasswordSalt)

@@ -1,11 +1,13 @@
-﻿using HGSSSARAssistant.Core;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace HGSSSARAssistant.Web.Models
 {
-    public class UserViewModel : Entity
+    public class UserViewModel
     {
+        [HiddenInput(DisplayValue = false)]
+        public long Id { get; set;  }
         [Required]
         [Display(Prompt = "Enter first name")]
         public String FirstName { get; set; }
@@ -20,22 +22,20 @@ namespace HGSSSARAssistant.Web.Models
         [Display(Prompt = "Enter email")]
         public String Email { get; set; }
         public String AndroidPushId { get; set; }
-        [Required]
         [DataType(DataType.Password)]
-        [Display(Prompt = "Enter password")]
+        [HiddenInput(DisplayValue = false)]
         public String Password { get; set; }
-        [Required]
-        [Display(Prompt = "Enter password salt")]
+        [HiddenInput(DisplayValue = false)]
         public String PasswordSalt { get; set; }
         [Required]
         [DataType(DataType.PhoneNumber)]
         [Display(Prompt = "Enter contact number")]
         public String ContactNumber { get; set; }
         public String AdditionalContactNumbers { get; set; }
-        public Station Station { get; set; }
-        public Category Category { get; set; }
-        public Role Role { get; set; }
-        public Availability Availability { get; set; }
-        public Expertise[] Expertise { get; set; }
+        public StationViewModel Station { get; set; }
+        public CategoryViewModel Category { get; set; }
+        public RoleViewModel Role { get; set; }
+        public AvailabilityViewModel Availability { get; set; }
+        public ExpertiseViewModel[] Expertise { get; set; }
     }
 }

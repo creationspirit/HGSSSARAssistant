@@ -3,6 +3,6 @@ namespace HGSSSARAssistant.Core
 {
     public class Role : Entity
     {
-        public String Name;
+        public String Name { get; set; }
     }
 }

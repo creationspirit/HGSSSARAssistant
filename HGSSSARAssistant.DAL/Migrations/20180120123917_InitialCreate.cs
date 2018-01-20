@@ -10,7 +10,7 @@ namespace HGSSSARAssistant.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "ActionTypes",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -18,11 +18,23 @@ namespace HGSSSARAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_ActionTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -34,23 +46,37 @@ namespace HGSSSARAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "MessageTemplates",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Message = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_MessageTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Availability",
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Availabilities",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -61,17 +87,17 @@ namespace HGSSSARAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Availability", x => x.Id);
+                    table.PrimaryKey("PK_Availabilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Availability_Location_LocationId",
+                        name: "FK_Availabilities_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Station",
+                name: "Stations",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -81,11 +107,11 @@ namespace HGSSSARAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Station", x => x.Id);
+                    table.PrimaryKey("PK_Stations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Station_Location_LocationId",
+                        name: "FK_Stations_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -96,6 +122,8 @@ namespace HGSSSARAssistant.DAL.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    ActionId = table.Column<long>(nullable: true),
+                    ActionId1 = table.Column<long>(nullable: true),
                     AdditionalContactNumbers = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     AndroidPushId = table.Column<string>(nullable: true),
@@ -114,33 +142,69 @@ namespace HGSSSARAssistant.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Availability_AvailabilityId",
+                        name: "FK_Users_Availabilities_AvailabilityId",
                         column: x => x.AvailabilityId,
-                        principalTable: "Availability",
+                        principalTable: "Availabilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Category_CategoryId",
+                        name: "FK_Users_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Role_RoleId",
+                        name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Station_StationId",
+                        name: "FK_Users_Stations_StationId",
                         column: x => x.StationId,
-                        principalTable: "Station",
+                        principalTable: "Stations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expertise",
+                name: "Actions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    ActionTypeId = table.Column<long>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    LeaderId = table.Column<long>(nullable: true),
+                    LocationId = table.Column<long>(nullable: true),
+                    MeetupTime = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Actions_ActionTypes_ActionTypeId",
+                        column: x => x.ActionTypeId,
+                        principalTable: "ActionTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Actions_Users_LeaderId",
+                        column: x => x.LeaderId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Actions_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expertises",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -150,9 +214,9 @@ namespace HGSSSARAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Expertise", x => x.Id);
+                    table.PrimaryKey("PK_Expertises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Expertise_Users_UserId",
+                        name: "FK_Expertises_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -160,19 +224,44 @@ namespace HGSSSARAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Availability_LocationId",
-                table: "Availability",
+                name: "IX_Actions_ActionTypeId",
+                table: "Actions",
+                column: "ActionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Actions_LeaderId",
+                table: "Actions",
+                column: "LeaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Actions_LocationId",
+                table: "Actions",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expertise_UserId",
-                table: "Expertise",
+                name: "IX_Availabilities_LocationId",
+                table: "Availabilities",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expertises_UserId",
+                table: "Expertises",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Station_LocationId",
-                table: "Station",
+                name: "IX_Stations_LocationId",
+                table: "Stations",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ActionId",
+                table: "Users",
+                column: "ActionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ActionId1",
+                table: "Users",
+                column: "ActionId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AvailabilityId",
@@ -193,30 +282,63 @@ namespace HGSSSARAssistant.DAL.Migrations
                 name: "IX_Users_StationId",
                 table: "Users",
                 column: "StationId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_Actions_ActionId",
+                table: "Users",
+                column: "ActionId",
+                principalTable: "Actions",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_Actions_ActionId1",
+                table: "Users",
+                column: "ActionId1",
+                principalTable: "Actions",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Actions_ActionTypes_ActionTypeId",
+                table: "Actions");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Actions_Users_LeaderId",
+                table: "Actions");
+
             migrationBuilder.DropTable(
-                name: "Expertise");
+                name: "Expertises");
+
+            migrationBuilder.DropTable(
+                name: "MessageTemplates");
+
+            migrationBuilder.DropTable(
+                name: "ActionTypes");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Availability");
+                name: "Actions");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Availabilities");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Station");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Stations");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }
