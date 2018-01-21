@@ -18,5 +18,6 @@ namespace HGSSSARAssistant.DAL.EF
         public DbSet<HGSSSARAssistant.Core.Availability> Availabilities { get; set; }
         public DbSet<HGSSSARAssistant.Core.ActionType> ActionTypes { get; set; }
         public DbSet<HGSSSARAssistant.Core.Action> Actions { get; set; }
+        public DbSet<HGSSSARAssistant.Core.Models.UserModel> UserModels { get; set; }
     }
 }
