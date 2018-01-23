@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+    [Authorize]
     public class LocationsController : Controller
     {
         private readonly ILocationRepository _context;

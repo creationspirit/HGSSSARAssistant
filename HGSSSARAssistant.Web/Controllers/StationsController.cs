@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+    [Authorize]
     public class StationsController : Controller
     {
         private readonly IStationRepository _context;

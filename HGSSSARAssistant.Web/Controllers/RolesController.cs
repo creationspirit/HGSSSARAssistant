@@ -4,9 +4,11 @@ using HGSSSARAssistant.Core;
 using HGSSSARAssistant.Core.Repositories;
 using System.Collections.Generic;
 using HGSSSARAssistant.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly IRoleRepository _context;

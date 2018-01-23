@@ -7,9 +7,12 @@ using HGSSSARAssistant.DAL.EF;
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.Web.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _context;

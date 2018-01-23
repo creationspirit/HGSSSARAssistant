@@ -9,9 +9,11 @@ using HGSSSARAssistant.Core;
 using HGSSSARAssistant.DAL.EF;
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+    [Authorize]
     public class AvailabilitiesController : Controller
     {
         private readonly IAvailabilityRepository _context;

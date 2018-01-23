@@ -4,9 +4,11 @@ using HGSSSARAssistant.Web.Models;
 using HGSSSARAssistant.Core;
 using System.Collections.Generic;
 using HGSSSARAssistant.Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IUserRepository _context;
