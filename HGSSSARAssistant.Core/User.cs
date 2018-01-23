@@ -18,6 +18,6 @@ namespace HGSSSARAssistant.Core
         public Category Category { get; set; }
         public Role Role { get; set; }
         public Availability Availability { get; set; }
-        public ICollection<Expertise> Expertise { get; set; }
+        public List<UserExpertise> UserExpertise { get; set; }
     }
 }

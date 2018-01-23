@@ -22,6 +22,24 @@ namespace HGSSSARAssistant.DAL.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<HGSSSARAssistant.Core.Category>().Property(c => c.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.ActionType>().Property(at => at.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.Expertise>().Property(e => e.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.Role>().Property(r => r.Name).IsRequired();
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasKey(ue => new { ue.UserId, ue.ExpertiseId });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.UserExpertise)
+                .HasForeignKey(ue => ue.UserId);
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasOne(ue => ue.Expertise)
+                .WithMany(e => e.UserExpertise)
+                .HasForeignKey(ue => ue.ExpertiseId);
+
             modelBuilder.Entity<HGSSSARAssistant.Core.User>(user =>
             {
                 user.Property(u => u.FirstName).IsRequired();
@@ -33,8 +51,38 @@ namespace HGSSSARAssistant.DAL.EF
                 user.HasOne(u => u.Role);
                 user.HasOne(u => u.Station);
                 user.HasOne(u => u.Category);
-                user.HasMany(u => u.Expertise);
             });
+
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Action>(action =>
+            {
+                action.Property(a => a.Name).IsRequired();
+                action.Property(a => a.MeetupTime).IsRequired();
+                action.HasOne(a => a.Location);
+            });
+
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Availability>(availability =>
+            {
+                availability.Property(a => a.StartTime).IsRequired();
+                availability.Property(a => a.EndTime).IsRequired();
+                availability.HasOne(a => a.Location);
+            });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Station>(station =>
+            {
+                station.Property(s => s.Name).IsRequired();
+                station.HasOne(s => s.Location);
+            });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Location>(loc =>
+            {
+                loc.Property(l => l.Name);
+                loc.Property(l => l.Latitude).IsRequired();
+                loc.Property(l => l.Longitude).IsRequired();
+            });
+
+
         }
     }
 }
