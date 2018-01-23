@@ -12,7 +12,7 @@ namespace HGSSSARAssistant.Web.Controllers
     {
         public IActionResult Index()
         {
-            return Redirect("Users");
+            return View();
         }
         
         public IActionResult Error()
