@@ -53,7 +53,6 @@ namespace HGSSSARAssistant.Web.Models
 
         public String AdditionalContactNumbers { get; set; }
 
-        [Required]
         [Display(Prompt = "Choose station")]
         public long StationId { get; set; }
 
@@ -72,9 +71,9 @@ namespace HGSSSARAssistant.Web.Models
         [Display(Name = "Role")]
         public String RoleName { get; set; }
 
-        public AvailabilityViewModel Availability { get; set; }
-        [Display(Name = "Expertises")]
+        //public AvailabilityViewModel[] Availability { get; set; }
+        //[Display(Name = "Expertises")]
 
-        public ExpertiseViewModel[] Expertise { get; set; }
+        //public ExpertiseViewModel[] Expertise { get; set; }
     }
 }

@@ -154,11 +154,9 @@ namespace HGSSSARAssistant.Web.Controllers
         }
         private Role ConvertToModel(RoleViewModel roleModel)
         {
-            Role role = new Role
-            {
-                Id = roleModel.Id,
-                Name = roleModel.Name
-            };
+            Role role = _context.GetById(roleModel.Id);
+            if (role == null) role = new Role();
+            role.Name = roleModel.Name;
 
             return role;
         }

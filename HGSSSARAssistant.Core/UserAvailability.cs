@@ -4,11 +4,11 @@ using System.Text;
 
 namespace HGSSSARAssistant.Core
 {
-    public class UserExpertise
+    public class UserAvailability
     {
         public long UserId { get; set; }
         public User User { get; set; }
-        public long ExpertiseId { get; set; }
-        public Expertise Expertise { get; set; }
+        public long AvailabilityId { get; set; }
+        public Availability Availability { get; set; }
     }
 }

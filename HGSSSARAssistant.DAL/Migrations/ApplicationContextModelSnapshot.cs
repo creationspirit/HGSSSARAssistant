@@ -141,23 +141,12 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.Station", b =>
@@ -182,8 +171,6 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccessFailedCount");
-
                     b.Property<long?>("ActionId");
 
                     b.Property<long?>("ActionId1");
@@ -194,23 +181,77 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("AndroidPushId");
 
-                    b.Property<long?>("AvailabilityId");
-
                     b.Property<long?>("CategoryId");
+
+                    b.Property<string>("ContactNumber");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("Password");
+
+                    b.Property<long?>("RoleId");
+
+                    b.Property<long?>("StationId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActionId");
+
+                    b.HasIndex("ActionId1");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("StationId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.UserAvailability", b =>
+                {
+                    b.Property<long>("UserId");
+
+                    b.Property<long>("AvailabilityId");
+
+                    b.HasKey("UserId", "AvailabilityId");
+
+                    b.HasIndex("AvailabilityId");
+
+                    b.ToTable("UserAvailability");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.UserExpertise", b =>
+                {
+                    b.Property<long>("UserId");
+
+                    b.Property<long>("ExpertiseId");
+
+                    b.HasKey("UserId", "ExpertiseId");
+
+                    b.HasIndex("ExpertiseId");
+
+                    b.ToTable("UserExpertise");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.DAL.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
-
-                    b.Property<string>("ContactNumber");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -228,11 +269,7 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<long?>("RoleId");
-
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<long?>("StationId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -241,14 +278,6 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActionId");
-
-                    b.HasIndex("ActionId1");
-
-                    b.HasIndex("AvailabilityId");
-
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -256,27 +285,33 @@ namespace HGSSSARAssistant.DAL.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("StationId");
-
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("HGSSSARAssistant.Core.UserExpertise", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
-                    b.Property<long>("UserId");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<long>("ExpertiseId");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
 
-                    b.HasKey("UserId", "ExpertiseId");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
 
-                    b.HasIndex("ExpertiseId");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
 
-                    b.ToTable("UserExpertise");
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -285,7 +320,8 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<long>("RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -294,7 +330,7 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -303,7 +339,8 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<long>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -312,7 +349,7 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -320,7 +357,8 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<long>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -329,11 +367,11 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<long>("UserId");
+                    b.Property<string>("UserId");
 
-                    b.Property<long>("RoleId");
+                    b.Property<string>("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -342,9 +380,9 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<long>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -396,10 +434,6 @@ namespace HGSSSARAssistant.DAL.Migrations
                         .WithMany("InvitedRescuers")
                         .HasForeignKey("ActionId1");
 
-                    b.HasOne("HGSSSARAssistant.Core.Availability", "Availability")
-                        .WithMany()
-                        .HasForeignKey("AvailabilityId");
-
                     b.HasOne("HGSSSARAssistant.Core.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
@@ -411,6 +445,19 @@ namespace HGSSSARAssistant.DAL.Migrations
                     b.HasOne("HGSSSARAssistant.Core.Station", "Station")
                         .WithMany()
                         .HasForeignKey("StationId");
+                });
+
+            modelBuilder.Entity("HGSSSARAssistant.Core.UserAvailability", b =>
+                {
+                    b.HasOne("HGSSSARAssistant.Core.Availability", "Availability")
+                        .WithMany("UserAvailability")
+                        .HasForeignKey("AvailabilityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HGSSSARAssistant.Core.User", "User")
+                        .WithMany("UserAvailability")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HGSSSARAssistant.Core.UserExpertise", b =>
@@ -426,46 +473,46 @@ namespace HGSSSARAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("HGSSSARAssistant.Core.Role")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HGSSSARAssistant.Core.User")
+                    b.HasOne("HGSSSARAssistant.DAL.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HGSSSARAssistant.Core.User")
+                    b.HasOne("HGSSSARAssistant.DAL.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("HGSSSARAssistant.Core.Role")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("HGSSSARAssistant.Core.User")
+                    b.HasOne("HGSSSARAssistant.DAL.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HGSSSARAssistant.Core.User")
+                    b.HasOne("HGSSSARAssistant.DAL.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Identity
-@using HGSSSARAssistant.Core
+@using HGSSSARAssistant.DAL
 
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

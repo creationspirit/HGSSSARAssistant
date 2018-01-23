@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HGSSSARAssistant.Core.Repositories
 {
-    public interface IRepository <T> where T : IEntity
+    public interface IRepository <T> where T : Entity
     {
         IEnumerable<T> GetAll();
         T GetById(long Id);

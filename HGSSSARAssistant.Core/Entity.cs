@@ -1,7 +1,7 @@
 ﻿using System;
 namespace HGSSSARAssistant.Core
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity
     {
         protected Entity()
         {

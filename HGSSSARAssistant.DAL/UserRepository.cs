@@ -28,7 +28,17 @@ namespace HGSSSARAssistant.DAL
         {
             _context.Dispose();
         }
-        
+
+        public override User GetById(long Id)
+        {
+            return _userEntity.SingleOrDefault(u => u.Id == Id);
+        }
+
+        public override IEnumerable<User> GetAll()
+        {
+            return _userEntity.AsEnumerable();
+        }
+
         public IEnumerable<User> GetAvailableUsers(DateTime time)
         {
             return _userEntity.AsEnumerable();

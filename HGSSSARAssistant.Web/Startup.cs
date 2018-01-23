@@ -29,7 +29,7 @@ namespace HGSSSARAssistant.Web
             var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection));
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 

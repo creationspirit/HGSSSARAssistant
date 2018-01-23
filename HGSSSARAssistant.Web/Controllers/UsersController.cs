@@ -17,13 +17,15 @@ namespace HGSSSARAssistant.Web.Controllers
         private readonly IRoleRepository _roleRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IExpertiseRepository _expertiseRepository;
+        private readonly IAvailabilityRepository _availabilityRepository;
 
         public UsersController(
             IUserRepository context,
             IStationRepository stationRepository,
             IRoleRepository roleRepository,
             ICategoryRepository categoryRepository,
-            IExpertiseRepository expertiseRepository
+            IExpertiseRepository expertiseRepository,
+            IAvailabilityRepository availabilityRepository
         )
         {
             _context = context;
@@ -31,6 +33,7 @@ namespace HGSSSARAssistant.Web.Controllers
             _roleRepository = roleRepository;
             _categoryRepository = categoryRepository;
             _expertiseRepository = expertiseRepository;
+            _availabilityRepository = availabilityRepository;
         }
 
         // GET: Users
@@ -76,7 +79,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,Id")] UserViewModel userModel)
+        public ActionResult Create([Bind("FirstName,LastName,Email,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -104,6 +107,10 @@ namespace HGSSSARAssistant.Web.Controllers
 
             UserViewModel userModel = ConvertToViewModel(user);
 
+            ViewBag.StationList = new List<Station>(_stationRepository.GetAll());
+            ViewBag.RoleList = new List<Role>(_roleRepository.GetAll());
+            ViewBag.CategoryList = new List<Category>(_categoryRepository.GetAll());
+            ViewBag.ExpertiseList = new List<Expertise>(_expertiseRepository.GetAll());
             return View(userModel);
         }
 
@@ -112,7 +119,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
+        public ActionResult Edit(long id, [Bind("FirstName,LastName,Email,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
         {
             if (id != userModel.Id)
             {
@@ -176,18 +183,20 @@ namespace HGSSSARAssistant.Web.Controllers
 
         private User ConvertToModel(UserViewModel userModel)
         {
-            User user = new User
-            {
-                Id = userModel.Id,
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Address = userModel.Address,
-                Email = userModel.Email,
-                AndroidPushId = userModel.AndroidPushId,
-                ContactNumber = userModel.ContactNumber,
-                AdditionalContactNumbers = userModel.AdditionalContactNumbers,
-                //Station = _stationRepository.GetById(userModel.StationId)
-            };
+            User user = _context.GetById(userModel.Id);
+            if (user == null) user = new User();
+
+            user.Id = userModel.Id;
+            user.FirstName = userModel.FirstName;
+            user.LastName = userModel.LastName;
+            user.Address = userModel.Address;
+            user.Email = userModel.Email;
+            user.AndroidPushId = userModel.AndroidPushId;
+            user.ContactNumber = userModel.ContactNumber;
+            user.AdditionalContactNumbers = userModel.AdditionalContactNumbers;
+            user.Station = _stationRepository.GetById(userModel.StationId);
+            user.Role = _roleRepository.GetById(userModel.RoleId);
+            user.Category = _categoryRepository.GetById(userModel.CategoryId);
 
             return user;
         }
@@ -204,12 +213,12 @@ namespace HGSSSARAssistant.Web.Controllers
                 AndroidPushId = user.AndroidPushId,
                 ContactNumber = user.ContactNumber,
                 AdditionalContactNumbers = user.AdditionalContactNumbers,
-                //StationId = user.Station.Id,
-                //StationName = user.Station.Name,
-                //CategoryId = user.Category.Id,
-                //CategoryName = user.Category.Name,
-                //RoleId = user.Role.Id,
-                //RoleName = user.Role.Name
+                StationId = user.Station.Id,
+                StationName = user.Station.Name,
+                CategoryId = user.Category.Id,
+                CategoryName = user.Category.Name,
+                RoleId = user.Role.Id,
+                RoleName = user.Role.Name
             };
 
             return userModel;

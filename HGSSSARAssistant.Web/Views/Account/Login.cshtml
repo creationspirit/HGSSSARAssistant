@@ -1,10 +1,10 @@
 ﻿@using System.Collections.Generic
 @using System.Linq
-@using HGSSSARAssistant.Core
+@using HGSSSARAssistant.DAL
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
 @model LoginViewModel
-@inject SignInManager<User> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Log in";

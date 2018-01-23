@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace HGSSSARAssistant.DAL
 {
-    public class Repository<T> : IRepository<T> where T : class, IEntity
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         private ApplicationContext _context;
 
@@ -26,12 +26,12 @@ namespace HGSSSARAssistant.DAL
             _entitySet.Remove(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _entitySet.AsEnumerable();
         }
 
-        public T GetById(long Id)
+        public virtual T GetById(long Id)
         {
             return _entitySet.SingleOrDefault(e => e.Id == Id);
         }

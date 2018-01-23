@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HGSSSARAssistant.DAL.EF
 {
-    public class ApplicationContext : IdentityDbContext<User, Role, long>
+    public class ApplicationContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<HGSSSARAssistant.Core.User> Users { get; set; }
         public DbSet<HGSSSARAssistant.Core.Station> Stations { get; set; }
         public DbSet<HGSSSARAssistant.Core.Role> Roles { get; set; }
@@ -43,6 +44,19 @@ namespace HGSSSARAssistant.DAL.EF
                 .WithMany(e => e.UserExpertise)
                 .HasForeignKey(ue => ue.ExpertiseId);
 
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserAvailability>()
+                .HasKey(ua => new { ua.UserId, ua.AvailabilityId });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserAvailability>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.UserAvailability)
+                .HasForeignKey(ua => ua.UserId);
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserAvailability>()
+                .HasOne(ua => ua.Availability)
+                .WithMany(a => a.UserAvailability)
+                .HasForeignKey(ua => ua.AvailabilityId);
+
             modelBuilder.Entity<HGSSSARAssistant.Core.User>(user =>
             {
                 user.HasKey(u => u.Id);
@@ -52,6 +66,10 @@ namespace HGSSSARAssistant.DAL.EF
                 user.HasOne(u => u.Role);
                 user.HasOne(u => u.Station);
                 user.HasOne(u => u.Category);
+                user.HasMany(u => u.UserAvailability)
+                    .WithOne(ua => ua.User);
+                user.HasMany(u => u.UserExpertise)
+                    .WithOne(ue => ue.User);
             });
 
 

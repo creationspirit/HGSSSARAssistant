@@ -2,7 +2,8 @@
 using System;
 namespace HGSSSARAssistant.Core
 {
-    public class Role : IdentityRole<long>, IEntity
+    public class Role : Entity
     {
+        public String Name { get; set; }
     }
 }
