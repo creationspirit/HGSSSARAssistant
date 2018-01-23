@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace HGSSSARAssistant.DAL
 {
-    public class Repository<T> : IRepository<T> where T : Entity
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
         private ApplicationContext _context;
 

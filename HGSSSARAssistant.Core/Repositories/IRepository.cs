@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace HGSSSARAssistant.Core.Repositories
 {
-    public interface IRepository <T> where T : Entity
+    public interface IRepository <T> where T : IEntity
     {
         IEnumerable<T> GetAll();
         T GetById(long Id);

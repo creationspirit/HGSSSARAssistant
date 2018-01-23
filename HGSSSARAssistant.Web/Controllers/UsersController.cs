@@ -74,7 +74,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,StationId,Id")] UserViewModel userModel)
+        public ActionResult Create([Bind("FirstName,LastName,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
+        public ActionResult Edit(long id, [Bind("FirstName,LastName,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,Id")] UserViewModel userModel)
         {
             if (id != userModel.Id)
             {
@@ -182,11 +182,9 @@ namespace HGSSSARAssistant.Web.Controllers
                 Address = userModel.Address,
                 Email = userModel.Email,
                 AndroidPushId = userModel.AndroidPushId,
-                Password = userModel.Password,
-                PasswordSalt = userModel.PasswordSalt,
                 ContactNumber = userModel.ContactNumber,
                 AdditionalContactNumbers = userModel.AdditionalContactNumbers,
-                Station = _stationRepository.GetById(userModel.StationId)
+                //Station = _stationRepository.GetById(userModel.StationId)
             };
 
             return user;
@@ -202,16 +200,14 @@ namespace HGSSSARAssistant.Web.Controllers
                 Address = user.Address,
                 Email = user.Email,
                 AndroidPushId = user.AndroidPushId,
-                Password = user.Password,
-                PasswordSalt = user.PasswordSalt,
                 ContactNumber = user.ContactNumber,
                 AdditionalContactNumbers = user.AdditionalContactNumbers,
-                StationId = user.Station.Id,
-                StationName = user.Station.Name,
-                CategoryId = user.Category.Id,
-                CategoryName = user.Category.Name,
-                RoleId = user.Role.Id,
-                RoleName = user.Role.Name
+                //StationId = user.Station.Id,
+                //StationName = user.Station.Name,
+                //CategoryId = user.Category.Id,
+                //CategoryName = user.Category.Name,
+                //RoleId = user.Role.Id,
+                //RoleName = user.Role.Name
             };
 
             return userModel;

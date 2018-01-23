@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using HGSSSARAssistant.DAL.EF;
 using HGSSSARAssistant.DAL;
 using HGSSSARAssistant.Core.Repositories;
+using HGSSSARAssistant.Core;
+using Microsoft.AspNetCore.Identity;
+using HGSSSARAssistant.Web.Services;
 
 namespace HGSSSARAssistant.Web
 {
@@ -26,6 +29,10 @@ namespace HGSSSARAssistant.Web
             var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection));
 
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IStationRepository, StationRepository>();
@@ -37,6 +44,8 @@ namespace HGSSSARAssistant.Web
             services.AddTransient<IExpertiseRepository, ExpertiseRepository>();
             services.AddTransient<ILocationRepository, LocationRepository>();
             services.AddTransient<IMessageTemplateRepository, MessageTemplateRepository>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +54,8 @@ namespace HGSSSARAssistant.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -52,6 +63,8 @@ namespace HGSSSARAssistant.Web
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
