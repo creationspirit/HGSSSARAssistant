@@ -75,5 +75,10 @@ namespace HGSSSARAssistant.DAL
         {
             return _userEntity.Where(user => user.Station.Equals(station));            
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _userEntity.Single(user => user.Email.Equals(email));
+        }
     }
 }

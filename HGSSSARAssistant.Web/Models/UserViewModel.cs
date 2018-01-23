@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HGSSSARAssistant.Web.Models
@@ -71,9 +72,25 @@ namespace HGSSSARAssistant.Web.Models
         [Display(Name = "Role")]
         public String RoleName { get; set; }
 
-        //public AvailabilityViewModel[] Availability { get; set; }
-        //[Display(Name = "Expertises")]
+        [Display(Name = "Is Available?")]
+        public bool IsAvailable
+        {
+            get
+            {
+                if (Availability == null) return false;
 
+                DateTime now = new DateTime();
+                foreach(AvailabilityViewModel period in Availability)
+                {
+                    if (period.StartTime <= now && period.EndTime >= now) return true;
+                }
+                return false;
+            }
+        }
+
+        public List<AvailabilityViewModel> Availability { get; set; }
+       
+        //[Display(Name = "Expertises")]
         //public ExpertiseViewModel[] Expertise { get; set; }
     }
 }

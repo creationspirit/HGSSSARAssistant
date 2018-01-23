@@ -10,6 +10,7 @@ namespace HGSSSARAssistant.Web.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [RegularExpression(".*@hgss.hr", ErrorMessage = "Email must be under hgss.hr domain.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 

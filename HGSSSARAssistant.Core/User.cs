@@ -14,10 +14,12 @@ namespace HGSSSARAssistant.Core
         public String Password { get; set; }
         public String ContactNumber { get; set; }
         public String AdditionalContactNumbers { get; set; }
+
         public Station Station { get; set; }
         public Category Category { get; set; }
         public Role Role { get; set; }
-        public List<UserAvailability> UserAvailability { get; set; }
-        public List<UserExpertise> UserExpertise { get; set; }
+
+        public ICollection<Availability> Availiabilities { get; set; }
+        public ICollection<UserExpertise> UserExpertise { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace HGSSSARAssistant.Core
     {
         public long UserId { get; set; }
         public User User { get; set; }
+
         public long ExpertiseId { get; set; }
         public Expertise Expertise { get; set; }
     }
