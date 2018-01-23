@@ -16,7 +16,7 @@ namespace HGSSSARAssistant.DAL
         public RoleRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
-            this._roleEntity = context.Set<Role>();
+            this._roleEntity = context.Roles;
         }
 
         public void Dispose()

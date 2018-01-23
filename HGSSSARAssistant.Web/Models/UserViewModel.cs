@@ -8,34 +8,73 @@ namespace HGSSSARAssistant.Web.Models
     {
         [HiddenInput(DisplayValue = false)]
         public long Id { get; set;  }
+
         [Required]
         [Display(Prompt = "Enter first name")]
         public String FirstName { get; set; }
+
         [Required]
         [Display(Prompt = "Enter last name")]
+
         public String LastName { get; set; }
+
+        public String Name
+        {
+            get
+            {
+                return (FirstName + " " + LastName);
+            }
+        }
+
         [Required]
         [Display(Prompt = "Enter address")]
         public String Address { get; set; }
+
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Prompt = "Enter email")]
+
         public String Email { get; set; }
+
         public String AndroidPushId { get; set; }
+
         [DataType(DataType.Password)]
-        [HiddenInput(DisplayValue = false)]
+
         public String Password { get; set; }
-        [HiddenInput(DisplayValue = false)]
+
         public String PasswordSalt { get; set; }
+
         [Required]
         [DataType(DataType.PhoneNumber)]
         [Display(Prompt = "Enter contact number")]
+
         public String ContactNumber { get; set; }
+        [DataType(DataType.PhoneNumber)]
+
         public String AdditionalContactNumbers { get; set; }
-        public StationViewModel Station { get; set; }
-        public CategoryViewModel Category { get; set; }
-        public RoleViewModel Role { get; set; }
+
+        [Required]
+        [Display(Prompt = "Choose station")]
+        public long StationId { get; set; }
+
+        [Display(Name = "Station")]
+        public String StationName { get; set; }
+
+        [Display(Prompt = "Choose category")]
+        public long CategoryId { get; set; }
+
+        [Display(Name = "Category")]
+        public String CategoryName { get; set; }
+
+        [Display(Prompt = "Choose role")]
+        public long RoleId { get; set; }
+
+        [Display(Name = "Role")]
+        public String RoleName { get; set; }
+
         public AvailabilityViewModel Availability { get; set; }
+        [Display(Name = "Expertises")]
+
         public ExpertiseViewModel[] Expertise { get; set; }
     }
 }

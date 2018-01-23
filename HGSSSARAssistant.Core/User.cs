@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace HGSSSARAssistant.Core
 {
     public class User : Entity
@@ -16,6 +18,6 @@ namespace HGSSSARAssistant.Core
         public Category Category { get; set; }
         public Role Role { get; set; }
         public Availability Availability { get; set; }
-        public Expertise[] Expertise { get; set; }
+        public ICollection<Expertise> Expertise { get; set; }
     }
 }

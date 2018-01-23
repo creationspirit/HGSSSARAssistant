@@ -11,7 +11,7 @@ using System;
 namespace HGSSSARAssistant.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180120123917_InitialCreate")]
+    [Migration("20180122143854_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

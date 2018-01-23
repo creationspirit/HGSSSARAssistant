@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace HGSSSARAssistant.Core
 {
     public class Action : Entity
@@ -7,8 +9,8 @@ namespace HGSSSARAssistant.Core
         public String Description { get; set; }
         public DateTime MeetupTime { get; set; }
         public User Leader { get; set; }
-        public User[] InvitedRescuers { get; set; }
-        public User[] AttendedRescuers { get; set; }
+        public ICollection<User> InvitedRescuers { get; set; }
+        public ICollection<User> AttendedRescuers { get; set; }
         public Location Location { get; set; }
         public ActionType ActionType { get; set; }
     }

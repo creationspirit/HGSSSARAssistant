@@ -12,11 +12,23 @@ namespace HGSSSARAssistant.Web.Controllers
         private readonly IUserRepository _context;
 
         private readonly IStationRepository _stationRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IExpertiseRepository _expertiseRepository;
 
-        public UsersController(IUserRepository context, IStationRepository stationRepository)
+        public UsersController(
+            IUserRepository context,
+            IStationRepository stationRepository,
+            IRoleRepository roleRepository,
+            ICategoryRepository categoryRepository,
+            IExpertiseRepository expertiseRepository
+        )
         {
             _context = context;
             _stationRepository = stationRepository;
+            _roleRepository = roleRepository;
+            _categoryRepository = categoryRepository;
+            _expertiseRepository = expertiseRepository;
         }
 
         // GET: Users
@@ -51,6 +63,9 @@ namespace HGSSSARAssistant.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.StationList = new List<Station>(_stationRepository.GetAll());
+            ViewBag.RoleList = new List<Role>(_roleRepository.GetAll());
+            ViewBag.CategoryList = new List<Category>(_categoryRepository.GetAll());
+            ViewBag.ExpertiseList = new List<Expertise>(_expertiseRepository.GetAll());
             return View();
         }
 
@@ -59,7 +74,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,Station,Id")] UserViewModel userModel)
+        public ActionResult Create([Bind("FirstName,LastName,Address,Email,AndroidPushId,Password,PasswordSalt,ContactNumber,AdditionalContactNumbers,StationId,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -171,7 +186,7 @@ namespace HGSSSARAssistant.Web.Controllers
                 PasswordSalt = userModel.PasswordSalt,
                 ContactNumber = userModel.ContactNumber,
                 AdditionalContactNumbers = userModel.AdditionalContactNumbers,
-                Station = userModel.Station == null ? null : _stationRepository.GetById(userModel.Station.Id)
+                Station = _stationRepository.GetById(userModel.StationId)
             };
 
             return user;
@@ -191,11 +206,12 @@ namespace HGSSSARAssistant.Web.Controllers
                 PasswordSalt = user.PasswordSalt,
                 ContactNumber = user.ContactNumber,
                 AdditionalContactNumbers = user.AdditionalContactNumbers,
-                Station = user.Station == null ? null : new StationViewModel
-                {
-                    Id = user.Station.Id,
-                    Name = user.Station.Name
-                }
+                StationId = user.Station.Id,
+                StationName = user.Station.Name,
+                CategoryId = user.Category.Id,
+                CategoryName = user.Category.Name,
+                RoleId = user.Role.Id,
+                RoleName = user.Role.Name
             };
 
             return userModel;

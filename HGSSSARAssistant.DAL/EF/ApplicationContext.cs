@@ -18,5 +18,23 @@ namespace HGSSSARAssistant.DAL.EF
         public DbSet<HGSSSARAssistant.Core.Availability> Availabilities { get; set; }
         public DbSet<HGSSSARAssistant.Core.ActionType> ActionTypes { get; set; }
         public DbSet<HGSSSARAssistant.Core.Action> Actions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.User>(user =>
+            {
+                user.Property(u => u.FirstName).IsRequired();
+                user.Property(u => u.LastName).IsRequired();
+                user.Property(u => u.Password).IsRequired();
+                user.Property(u => u.PasswordSalt).IsRequired();
+                user.Property(u => u.Address).IsRequired();
+                user.Property(u => u.Address).IsRequired();
+                user.HasOne(u => u.Role);
+                user.HasOne(u => u.Station);
+                user.HasOne(u => u.Category);
+                user.HasMany(u => u.Expertise);
+            });
+        }
     }
 }

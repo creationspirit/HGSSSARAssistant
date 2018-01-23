@@ -16,7 +16,7 @@ namespace HGSSSARAssistant.DAL
         public StationRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
-            this._stationEntity = context.Set<Station>();
+            this._stationEntity = context.Stations;
         }
 
         public void Dispose()

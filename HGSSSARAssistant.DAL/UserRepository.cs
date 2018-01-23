@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using HGSSSARAssistant.DAL.EF;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace HGSSSARAssistant.DAL
 {
@@ -12,19 +13,23 @@ namespace HGSSSARAssistant.DAL
     {
         private ApplicationContext _context;
 
-        private DbSet<User> _userEntity;
-
+        private IIncludableQueryable<User, Station> _userEntity;
+        
         public UserRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
-            this._userEntity = context.Set<User>();
+            this._userEntity = context.Users
+                .Include(u => u.Category)
+                .Include(u => u.Expertise)
+                .Include(u => u.Role)
+                .Include(u => u.Station);
         }
 
         public void Dispose()
         {
             _context.Dispose();
         }
-
+        
         public IEnumerable<User> GetAvailableUsers(DateTime time)
         {
             return _userEntity.AsEnumerable();
@@ -58,7 +63,7 @@ namespace HGSSSARAssistant.DAL
 
         public IEnumerable<User> GetUsersByStation(Station station)
         {
-            return _userEntity.Where(user => user.Station.Equals(station));            
+            return _userEntity.Where(user => user.Expertise.Equals(station));            
         }
     }
 }
