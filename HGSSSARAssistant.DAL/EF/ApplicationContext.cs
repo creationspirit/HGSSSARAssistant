@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HGSSSARAssistant.Core;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace HGSSSARAssistant.DAL.EF
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<User, Role, long>
     {
-        public ApplicationContext(DbContextOptions options) : base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
 
@@ -21,15 +23,14 @@ namespace HGSSSARAssistant.DAL.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<HGSSSARAssistant.Core.User>(user =>
             {
-                user.Property(u => u.FirstName).IsRequired();
-                user.Property(u => u.LastName).IsRequired();
-                user.Property(u => u.Password).IsRequired();
-                user.Property(u => u.PasswordSalt).IsRequired();
-                user.Property(u => u.Address).IsRequired();
-                user.Property(u => u.Address).IsRequired();
+                user.HasKey(u => u.Id);
+                user.Property(u => u.FirstName);
+                user.Property(u => u.LastName);
+                user.Property(u => u.Address);
                 user.HasOne(u => u.Role);
                 user.HasOne(u => u.Station);
                 user.HasOne(u => u.Category);
