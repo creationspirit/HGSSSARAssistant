@@ -3,6 +3,6 @@ namespace HGSSSARAssistant.Core
 {
     public class Category : Entity
     {
-        public String Name;
+        public String Name { get; set; }
+        }
     }
-}

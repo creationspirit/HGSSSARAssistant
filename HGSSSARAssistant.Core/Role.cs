@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 namespace HGSSSARAssistant.Core
 {
-    public class Role : Entity
+    public class Role : IdentityRole<long>, IEntity
     {
-        public String Name { get; set; }
     }
 }

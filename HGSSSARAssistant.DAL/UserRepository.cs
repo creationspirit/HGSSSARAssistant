@@ -20,7 +20,6 @@ namespace HGSSSARAssistant.DAL
             this._context = context;
             this._userEntity = context.Users
                 .Include(u => u.Category)
-                .Include(u => u.Expertise)
                 .Include(u => u.Role)
                 .Include(u => u.Station);
         }
@@ -48,7 +47,8 @@ namespace HGSSSARAssistant.DAL
 
         public IEnumerable<User> GetUsersByExpertise(Expertise expertise)
         {
-            return _userEntity.Where(user => user.Expertise.Contains(expertise));
+            // TODO: implement
+            return _userEntity.AsEnumerable();
         }
 
         public IEnumerable<User> GetUsersByName(string name)
@@ -63,7 +63,7 @@ namespace HGSSSARAssistant.DAL
 
         public IEnumerable<User> GetUsersByStation(Station station)
         {
-            return _userEntity.Where(user => user.Expertise.Equals(station));            
+            return _userEntity.Where(user => user.Station.Equals(station));            
         }
     }
 }

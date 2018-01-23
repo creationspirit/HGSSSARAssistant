@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HGSSSARAssistant.Core;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace HGSSSARAssistant.DAL.EF
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<User, Role, long>
     {
-        public ApplicationContext(DbContextOptions options) : base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
 
@@ -21,20 +23,67 @@ namespace HGSSSARAssistant.DAL.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Category>().Property(c => c.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.ActionType>().Property(at => at.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.Expertise>().Property(e => e.Name).IsRequired();
+            modelBuilder.Entity<HGSSSARAssistant.Core.Role>().Property(r => r.Name).IsRequired();
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasKey(ue => new { ue.UserId, ue.ExpertiseId });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.UserExpertise)
+                .HasForeignKey(ue => ue.UserId);
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.UserExpertise>()
+                .HasOne(ue => ue.Expertise)
+                .WithMany(e => e.UserExpertise)
+                .HasForeignKey(ue => ue.ExpertiseId);
 
             modelBuilder.Entity<HGSSSARAssistant.Core.User>(user =>
             {
-                user.Property(u => u.FirstName).IsRequired();
-                user.Property(u => u.LastName).IsRequired();
-                user.Property(u => u.Password).IsRequired();
-                user.Property(u => u.PasswordSalt).IsRequired();
-                user.Property(u => u.Address).IsRequired();
-                user.Property(u => u.Address).IsRequired();
+                user.HasKey(u => u.Id);
+                user.Property(u => u.FirstName);
+                user.Property(u => u.LastName);
+                user.Property(u => u.Address);
                 user.HasOne(u => u.Role);
                 user.HasOne(u => u.Station);
                 user.HasOne(u => u.Category);
-                user.HasMany(u => u.Expertise);
             });
+
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Action>(action =>
+            {
+                action.Property(a => a.Name).IsRequired();
+                action.Property(a => a.MeetupTime).IsRequired();
+                action.HasOne(a => a.Location);
+            });
+
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Availability>(availability =>
+            {
+                availability.Property(a => a.StartTime).IsRequired();
+                availability.Property(a => a.EndTime).IsRequired();
+                availability.HasOne(a => a.Location);
+            });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Station>(station =>
+            {
+                station.Property(s => s.Name).IsRequired();
+                station.HasOne(s => s.Location);
+            });
+
+            modelBuilder.Entity<HGSSSARAssistant.Core.Location>(loc =>
+            {
+                loc.Property(l => l.Name);
+                loc.Property(l => l.Latitude).IsRequired();
+                loc.Property(l => l.Longitude).IsRequired();
+            });
+
+
         }
     }
 }
