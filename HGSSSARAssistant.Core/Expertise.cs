@@ -8,6 +8,6 @@ namespace HGSSSARAssistant.Core
     {
         public String Name { get; set; }
 
-        public ICollection<UserExpertise> UserExpertise { get; set; }
+        public List<UserExpertise> UserExpertise { get; set; }
     }
 }

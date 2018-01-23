@@ -71,9 +71,9 @@ namespace HGSSSARAssistant.DAL.EF
                 action.HasOne(a => a.Location);
                 action.HasOne(a => a.Leader);
 
-                action.HasOne(a => a.InvitedRescuers)
+                action.HasMany(a => a.InvitedRescuers)
                     .WithOne();
-                action.HasOne(a => a.AttendedRescuers)
+                action.HasMany(a => a.AttendedRescuers)
                     .WithOne();
             });
 

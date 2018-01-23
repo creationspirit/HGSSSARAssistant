@@ -19,7 +19,7 @@ namespace HGSSSARAssistant.Core
         public Category Category { get; set; }
         public Role Role { get; set; }
 
-        public ICollection<Availability> Availiabilities { get; set; }
-        public ICollection<UserExpertise> UserExpertise { get; set; }
+        public List<Availability> Availiabilities { get; set; }
+        public List<UserExpertise> UserExpertise { get; set; }
     }
 }
