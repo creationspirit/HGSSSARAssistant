@@ -166,6 +166,40 @@ namespace HGSSSARAssistant.Web.Controllers
             return View(availabilityModel);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Availability(long id, UserAvailabilityViewModel availabilityModel)
+        //{
+        //    if (id != availabilityModel.UserId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            var user = ConvertToModel(availabilityModel);
+
+        //            _context.Update(user);
+        //            _context.Save();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!UserExists(availabilityModel.UserId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(availabilityModel);
+        //}
+
         // GET: Users/Delete/5
         public ActionResult Delete(long id)
         {

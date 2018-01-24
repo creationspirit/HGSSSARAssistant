@@ -12,7 +12,7 @@ using System;
 namespace HGSSSARAssistant.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180124095511_InitialCreate")]
+    [Migration("20180124121931_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,7 +185,7 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("AdditionalContactNumbers");
 
-                    b.Property<string>("Address");
+                    b.Property<long?>("AddressId");
 
                     b.Property<string>("AndroidPushId");
 
@@ -199,6 +199,8 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<string>("LastName");
 
+                    b.Property<long?>("LocationId");
+
                     b.Property<string>("Password");
 
                     b.Property<long?>("RoleId");
@@ -211,7 +213,11 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.HasIndex("ActionId1");
 
+                    b.HasIndex("AddressId");
+
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("RoleId");
 
@@ -433,9 +439,17 @@ namespace HGSSSARAssistant.DAL.Migrations
                         .WithMany("InvitedRescuers")
                         .HasForeignKey("ActionId1");
 
+                    b.HasOne("HGSSSARAssistant.Core.Location", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("HGSSSARAssistant.Core.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("HGSSSARAssistant.Core.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("HGSSSARAssistant.Core.Role", "Role")
                         .WithMany()

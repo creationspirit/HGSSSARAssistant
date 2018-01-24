@@ -264,13 +264,14 @@ namespace HGSSSARAssistant.DAL.Migrations
                     ActionId = table.Column<long>(nullable: true),
                     ActionId1 = table.Column<long>(nullable: true),
                     AdditionalContactNumbers = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
+                    AddressId = table.Column<long>(nullable: true),
                     AndroidPushId = table.Column<string>(nullable: true),
                     CategoryId = table.Column<long>(nullable: true),
                     ContactNumber = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
+                    LocationId = table.Column<long>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     RoleId = table.Column<long>(nullable: true),
                     StationId = table.Column<long>(nullable: true)
@@ -279,9 +280,21 @@ namespace HGSSSARAssistant.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Users_Locations_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Users_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Users_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -470,9 +483,19 @@ namespace HGSSSARAssistant.DAL.Migrations
                 column: "ActionId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_AddressId",
+                table: "Users",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_CategoryId",
                 table: "Users",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_LocationId",
+                table: "Users",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
