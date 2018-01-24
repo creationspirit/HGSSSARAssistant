@@ -83,6 +83,7 @@ namespace HGSSSARAssistant.DAL.EF
                 availability.Property(a => a.StartTime).IsRequired();
                 availability.Property(a => a.EndTime).IsRequired();
                 availability.HasOne(a => a.Location);
+                availability.Property(a => a.Day);
             });
 
             modelBuilder.Entity<HGSSSARAssistant.Core.Station>(station =>
