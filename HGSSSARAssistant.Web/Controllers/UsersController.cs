@@ -249,12 +249,23 @@ namespace HGSSSARAssistant.Web.Controllers
             user.Role = _roleRepository.GetById(userModel.RoleId);
             user.Category = _categoryRepository.GetById(userModel.CategoryId);
 
-            Location address = _locationRepository.Insert(new Location()
+            Location address = user.Address;
+            if (user.Address == null) {
+                address = _locationRepository.Insert(new Location()
                 {
                     Name = userModel.Address,
                     Latitude = userModel.AddressLat,
                     Longitude = userModel.AddressLng
                 });
+            } else {
+                
+                address.Name = userModel.Address;
+                address.Latitude = userModel.AddressLat;
+                address.Longitude = userModel.AddressLng;
+
+                address = _locationRepository.Update(address);
+            }
+
 			_locationRepository.Save();
             user.Address = address;
 

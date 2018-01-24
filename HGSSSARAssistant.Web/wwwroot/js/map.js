@@ -14,18 +14,33 @@ var populateAddressName = function(latlng) {
       }
     });
 }
+
+
 var initAddressMap = function() {
-    var mapMountEl = $('.js-map')[0];
-    if (!mapMountEl) {
+    var $mapMountEl = $('.js-map');
+    if (!$mapMountEl.length) {
         return;
     }
     var marker;
-    var map = new google.maps.Map(mapMountEl, {
+    var map = new google.maps.Map($mapMountEl[0], {
       center: {lat: 45.815, lng: 15.982},
       zoom: 10
     });
 
 
+    var initialMarkerLat = $mapMountEl.data('lat');
+    var initialMarkerLng = $mapMountEl.data('lng');
+
+    if (initialMarkerLat && initialMarkerLng) {
+        marker = new google.maps.Marker({
+          position: {
+            lat: parseFloat(initialMarkerLat, 10),
+            lng: parseFloat(initialMarkerLng, 10)
+          },
+          map: map,
+          draggable: true
+        });
+    }
 
     map.addListener('click', function(e) {
         if (marker) {
