@@ -21,6 +21,7 @@ namespace HGSSSARAssistant.DAL
             this._userEntity = context.Users
                 .Include(u => u.Category)
                 .Include(u => u.Role)
+                .Include(u => u.Address)
                 .Include(u => u.Station);
         }
 
