@@ -29,12 +29,26 @@ namespace HGSSSARAssistant.Web.Api
 			IEnumerable<User> availableUsers = _context.GetAvailableUsers(new DateTime());
             IEnumerable<User> users = _context.GetAll();
 
-            var result = users.Select(u => new
-            {
-                name = u.FirstName + " " + u.LastName,
-                isAvailable = u.Availiabilities != null,
-                lat = u.Location != null ? u.Location.Latitude : 0,
-                lon = u.Location != null ? u.Location.Longitude : 0
+            var result = users.Select(u => {
+                bool isAvailable = u.Availiabilities != null;
+                decimal Latitude, Longitude;
+
+                if (isAvailable) {
+                    var Location = u.Availiabilities.FirstOrDefault().Location;
+                    Latitude = Location.Latitude;
+                    Longitude = Location.Longitude;
+                } else {
+                    Latitude = u.Address.Latitude;
+                    Longitude = u.Address.Longitude;
+                }
+
+                return new
+                {
+                    name = u.FirstName + " " + u.LastName,
+                    isAvailable = isAvailable,
+                    lat = Latitude,
+                    lon = Longitude
+                };
             });
             return result;
         }
