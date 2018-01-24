@@ -24,13 +24,19 @@ namespace HGSSSARAssistant.Web.Api
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> GetUsers([FromQuery] bool available)
+        public object GetUsers()
         {
-            if (available)
+			IEnumerable<User> availableUsers = _context.GetAvailableUsers(new DateTime());
+            IEnumerable<User> users = _context.GetAll();
+
+            var result = users.Select(u => new
             {
-                return _context.GetAvailableUsers(new DateTime());
-            }
-            return _context.GetAll();
+                name = u.FirstName + " " + u.LastName,
+                isAvailable = u.Availiabilities != null,
+                lat = u.Location != null ? u.Location.Latitude : 0,
+                lon = u.Location != null ? u.Location.Longitude : 0
+            });
+            return result;
         }
 
         // GET: api/Users/5

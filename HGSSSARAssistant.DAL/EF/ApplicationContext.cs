@@ -50,7 +50,7 @@ namespace HGSSSARAssistant.DAL.EF
                 user.HasKey(u => u.Id);
                 user.Property(u => u.FirstName);
                 user.Property(u => u.LastName);
-                user.Property(u => u.Address);
+                user.HasOne(u => u.Address);
                 user.HasOne(u => u.Role);
                 user.HasOne(u => u.Station);
                 user.HasOne(u => u.Category);

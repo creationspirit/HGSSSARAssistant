@@ -189,7 +189,6 @@ namespace HGSSSARAssistant.Web.Controllers
             user.Id = userModel.Id;
             user.FirstName = userModel.FirstName;
             user.LastName = userModel.LastName;
-            user.Address = userModel.Address;
             user.Email = userModel.Email;
             user.AndroidPushId = userModel.AndroidPushId;
             user.ContactNumber = userModel.ContactNumber;
@@ -208,7 +207,6 @@ namespace HGSSSARAssistant.Web.Controllers
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Address = user.Address,
                 Email = user.Email,
                 AndroidPushId = user.AndroidPushId,
                 ContactNumber = user.ContactNumber,
