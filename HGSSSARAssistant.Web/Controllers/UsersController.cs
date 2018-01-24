@@ -151,6 +151,21 @@ namespace HGSSSARAssistant.Web.Controllers
             return View(userModel);
         }
 
+        // GET: Users/Availability/5
+        public ActionResult Availability(long id)
+        {
+            var user = _context.GetById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            UserAvailabilityViewModel availabilityModel = ConvertToAvailabilityModel(user);
+
+            return View(availabilityModel);
+        }
+
         // GET: Users/Delete/5
         public ActionResult Delete(long id)
         {
@@ -220,6 +235,18 @@ namespace HGSSSARAssistant.Web.Controllers
             };
 
             return userModel;
+        }
+
+        private UserAvailabilityViewModel ConvertToAvailabilityModel(User user)
+        {
+            var availabilityModel = new UserAvailabilityViewModel
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return availabilityModel;
         }
     }
 }
