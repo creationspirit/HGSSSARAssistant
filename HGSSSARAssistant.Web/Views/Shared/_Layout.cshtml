@@ -53,6 +53,8 @@
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/map.js" asp-append-version="true"></script>
+        <script src="~/js/schedule.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -70,8 +72,8 @@
         <script src="~/lib/moment/min/moment.min.js" asp-append-version="true"></script>
         <script src="~/lib/fullcalendar/dist/fullcalendar.min.js" asp-append-version="true"></script>    </environment>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD58tH2AwbTre09ubbb0YMY3sXXrg1lAww&callback=initMap" async defer></script>
-
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD58tH2AwbTre09ubbb0YMY3sXXrg1lAww&callback=initMap" async defer></script>
+        
     @RenderSection("Scripts", required: false)
 </body>
 </html>

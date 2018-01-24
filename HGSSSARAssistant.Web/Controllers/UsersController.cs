@@ -122,7 +122,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(long id, [Bind("FirstName,LastName,Email,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
+        public ActionResult Edit(long id, [Bind("FirstName,LastName,Email,Address,AddressLat,AddressLng,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
         {
             if (id != userModel.Id)
             {
