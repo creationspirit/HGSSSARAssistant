@@ -31,6 +31,12 @@ namespace HGSSSARAssistant.Web.Models
         [Display(Prompt = "Enter address")]
         public String Address { get; set; }
 
+		[Required]
+		public decimal AddressLat { get; set; }
+		
+		[Required]
+		public decimal AddressLng { get; set; }
+
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Prompt = "Enter email")]

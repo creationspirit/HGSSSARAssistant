@@ -18,6 +18,7 @@ namespace HGSSSARAssistant.Web.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly IExpertiseRepository _expertiseRepository;
         private readonly IAvailabilityRepository _availabilityRepository;
+        private readonly ILocationRepository _locationRepository;
 
         public UsersController(
             IUserRepository context,
@@ -25,7 +26,8 @@ namespace HGSSSARAssistant.Web.Controllers
             IRoleRepository roleRepository,
             ICategoryRepository categoryRepository,
             IExpertiseRepository expertiseRepository,
-            IAvailabilityRepository availabilityRepository
+            IAvailabilityRepository availabilityRepository,
+            ILocationRepository locationRepository
         )
         {
             _context = context;
@@ -34,6 +36,7 @@ namespace HGSSSARAssistant.Web.Controllers
             _categoryRepository = categoryRepository;
             _expertiseRepository = expertiseRepository;
             _availabilityRepository = availabilityRepository;
+            _locationRepository = locationRepository;
         }
 
         // GET: Users
@@ -79,7 +82,7 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("FirstName,LastName,Email,Address,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
+        public ActionResult Create([Bind("FirstName,LastName,Email,Address,AddressLat,AddressLng,AndroidPushId,ContactNumber,AdditionalContactNumbers,StationId,CategoryId,RoleId,Id")] UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -212,6 +215,15 @@ namespace HGSSSARAssistant.Web.Controllers
             user.Role = _roleRepository.GetById(userModel.RoleId);
             user.Category = _categoryRepository.GetById(userModel.CategoryId);
 
+            Location address = _locationRepository.Insert(new Location()
+                {
+                    Name = userModel.Address,
+                    Latitude = userModel.AddressLat,
+                    Longitude = userModel.AddressLng
+                });
+			_locationRepository.Save();
+            user.Address = address;
+
             return user;
         }
 
@@ -231,7 +243,10 @@ namespace HGSSSARAssistant.Web.Controllers
                 CategoryId = user.Category.Id,
                 CategoryName = user.Category.Name,
                 RoleId = user.Role.Id,
-                RoleName = user.Role.Name
+                RoleName = user.Role.Name,
+                Address = user.Address.Name,
+                AddressLat = user.Address.Latitude,
+                AddressLng = user.Address.Longitude
             };
 
             return userModel;
