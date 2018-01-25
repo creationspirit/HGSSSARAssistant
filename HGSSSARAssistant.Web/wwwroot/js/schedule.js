@@ -7,25 +7,19 @@ var locationPromptModal = function (initialModalData) {
     var $descriptionInput = $modal.find('.js-map-description');
 
     $modal.modal('show');
-
     if (initialModalData) {
         $latitudeInput.val(initialModalData.location.lat);
         $longitudeInput.val(initialModalData.location.lng);
         $addressInput.val(initialModalData.name);
 
-        var map = window.map;
-        if (marker) {
-            marker.setMap(null);
-        }
-        marker = new google.maps.Marker({
-            position: initialModalData.location,
-            map: map,
-            draggable: true
-        });
-        marker.addListener('dragend', function (event) {
-        });
-        marker.setMap(map);
+        singleLocationMap.placeMarker(initialModalData.location);
     }
+
+    $modal.one('shown.bs.modal', function (event) {
+        google.maps.event.trigger(singleLocationMap.map, 'resize');
+        singleLocationMap.map.setCenter(singleLocationMap.marker.getPosition());
+        
+    });
 
     return new Promise(function (resolve, reject) {  
         $modal.one('hide.bs.modal', function (event) {

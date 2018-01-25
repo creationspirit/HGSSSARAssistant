@@ -1,47 +1,33 @@
-﻿var $latitudeInput = $('.js-map-lat');
-var $longitudeInput = $('.js-map-lng');
-var $addressInput = $('.js-map-address');
+﻿var singleLocationMap = {
+  $latitudeInput: $('.js-map-lat'),
+  $longitudeInput: $('.js-map-lng'),
+  $addressInput: $('.js-map-address'),
+  $mapMountEl: $('.js-map'),
+  geocoder: null,
+  map: null,
+  marker: null,
 
-$addressInput.attr('data-autofill', true);
-$addressInput.on('input', function(e) {
-    $addressInput.attr('data-autofill', $addressInput.val().length === 0);
-});
-
-var populateLoactionInputs = function(latLng) {
-    $latitudeInput.val(latLng.lat);
-    $longitudeInput.val(latLng.lng);
-}
-
-var populateAddressName = function(latlng) {
-    var geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === 'OK') {
-        if (results[0] && $addressInput.attr('data-autofill') === 'true') {
-          $addressInput.val(results[0].formatted_address);
-          $addressInput.attr('data-autofill', true);
-        }
-      }
-    });
-}
-
-
-var initAddressMap = function() {
-    var $mapMountEl = $('.js-map');
-    if (!$mapMountEl.length) {
+  init: function() {
+    var self = this;
+    if (!self.$mapMountEl.length) {
         return;
     }
-    var marker;
-    var map = new google.maps.Map($mapMountEl[0], {
-      center: {lat: 45.815, lng: 15.982},
+
+    self.geocoder = new google.maps.Geocoder;
+    self.map = new google.maps.Map(self.$mapMountEl[0], {
+      center: {
+        lat: 45.815,
+        lng: 15.982
+      },
       zoom: 12,
       streetViewControl: false
     });
 
-    var initialMarkerLat = $mapMountEl.data('lat');
-    var initialMarkerLng = $mapMountEl.data('lng');
+    var initialMarkerLat = self.$mapMountEl.data('lat');
+    var initialMarkerLng = self.$mapMountEl.data('lng');
 
     if (initialMarkerLat && initialMarkerLng) {
-        marker = new google.maps.Marker({
+        self.marker = new google.maps.Marker({
           position: {
             lat: parseFloat(initialMarkerLat, 10),
             lng: parseFloat(initialMarkerLng, 10)
@@ -49,29 +35,86 @@ var initAddressMap = function() {
           map: map,
           draggable: true
         });
+        self.map.setCenter(self.marker.getPosition());
     }
 
-    map.addListener('click', function(e) {
-        if (marker) {
-            marker.setMap(null);
+    self.map.addListener('click', function(e) {
+        if (self.marker) {
+            self.marker.setMap(null);
         }
-        marker = new google.maps.Marker({
+        self.marker = new google.maps.Marker({
           position: e.latLng,
-          map: map,
+          map: self.map,
           draggable: true
         });
-        marker.addListener('dragend', function(event) {
-            populateAddressName(event.latLng);
-            populateLoactionInputs({
+
+        self.marker.addListener('dragend', function(event) {
+            self.populateAddressName(event.latLng);
+            self.populateLocationInputs({
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng()
             });
         });
-        populateAddressName(e.latLng);
-        populateLoactionInputs({
+        self.populateAddressName(e.latLng);
+        self.populateLocationInputs({
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
         });
-        marker.setMap(map);
+        self.marker.setMap(self.map);
     });
-}
+  },
+
+
+  populateLocationInputs: function(latLng) {
+    this.$latitudeInput.val(latLng.lat);
+    this.$longitudeInput.val(latLng.lng);
+  },
+
+  populateAddressName: function(latlng) {
+    var self = this;
+    this.geocoder.geocode({
+      location: latlng
+    }, function(results, status) {
+      if (status === 'OK') {
+        if (results[0]) {
+          self.$addressInput.val(results[0].formatted_address);
+        }
+      }
+    });
+  },
+
+  placeMarker: function(latLng) {
+    var self = this;
+    if (!latLng) {
+      return
+    }
+    if (self.marker) {
+      self.marker.setMap(null);
+    }
+
+    self.marker = new google.maps.Marker({
+      position: latLng,
+      map: self.map,
+      draggable: true
+    });
+
+    self.marker.addListener('dragend', function(event) {
+        self.populateAddressName(event.latLng);
+        self.populateLocationInputs({
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        });
+    });
+    self.populateAddressName(latLng);
+    self.populateLocationInputs({
+        lat: latLng.lat,
+        lng: latLng.lng
+    });
+    self.marker.setMap(self.map);
+    self.map.setCenter(self.marker.getPosition());
+  }
+
+};
+
+
+var initAddressMap = singleLocationMap.init.bind(singleLocationMap); // mimic module.exports
