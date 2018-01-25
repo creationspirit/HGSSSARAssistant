@@ -134,7 +134,10 @@ var initCalendar = function (eventData) {
 }
 
 
-fetch('/Users/1/Availabilities', {
+var button = $('.js-submit');
+var userId = button.data('user-id');
+
+fetch('/Users/' + userId + '/Availabilities', {
     method: 'GET',
     credentials: 'include',
     headers: {

@@ -10,7 +10,7 @@
         <h3>@Model.Name</h3>
         <div id='calendar'></div>
         <div class="form-group">
-            <input type="submit" value="Save" class="js-submit btn btn-info" />
+            <input type="submit" value="Save" class="js-submit btn btn-info" data-user-id="@Model.UserId" />
         </div>
     </div>
 </div>
@@ -44,6 +44,9 @@
         $('.js-submit').click(function (e) {
             e.preventDefault();
 
+            var button = $(e.target);
+            var userId = button.data('user-id');
+    
             var eventsFromCalendar = $('#calendar').fullCalendar('clientEvents').map(function (event) {
                 var end = event.end.clone();
                 var start = event.start.clone();
