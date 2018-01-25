@@ -20,10 +20,6 @@
 <div class="js-modal modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Choose location</h4>
-            </div>
             <div class="modal-body">
                 <div class="form-group">
                     <input type="text" name="Description" placeholder="Enter event description..." class="js-map-description form-control" />
@@ -82,7 +78,7 @@
                     progressBar: false,
                     closeOnEscape: true
                 });
-            }).catch(function () { 
+            }).catch(function () {
                 iziToast.show({
                     title: 'Error',
                     message: 'Unable to update schedule!',

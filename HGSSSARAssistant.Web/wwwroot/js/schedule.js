@@ -11,13 +11,19 @@ var locationPromptModal = function (initialModalData) {
         $latitudeInput.val(initialModalData.location.lat);
         $longitudeInput.val(initialModalData.location.lng);
         $addressInput.val(initialModalData.name);
+        $descriptionInput.val(initialModalData.title);
 
-        singleLocationMap.placeMarker(initialModalData.location);
+        singleLocationMap.placeMarker({
+            lat: initialModalData.location.lat,
+            lng: initialModalData.location.lng,
+        });
     }
 
     $modal.one('shown.bs.modal', function (event) {
         google.maps.event.trigger(singleLocationMap.map, 'resize');
-        singleLocationMap.map.setCenter(singleLocationMap.marker.getPosition());
+        if (singleLocationMap.marker) {
+            singleLocationMap.map.setCenter(singleLocationMap.marker.getPosition());
+        }
         
     });
 
@@ -30,8 +36,8 @@ var locationPromptModal = function (initialModalData) {
 
             if (lat && lng && description && address) {
                 resolve({
-                    lat: lat,
-                    lng: lng,
+                    lat: parseFloat(lat, 10),
+                    lng: parseFloat(lng, 10),
                     address: address,
                     description: description
                 });
@@ -90,8 +96,8 @@ var initCalendar = function (eventData) {
                     end: end,
                     title: result.description,
                     location: {
-                        latitude: result.lat,
-                        longitude: result.lng,
+                        lat: result.lat,
+                        lng: result.lng,
                         name: result.address,
                         description: result.description
                     }
@@ -111,8 +117,8 @@ var initCalendar = function (eventData) {
             }).then(function (result) {
                 calEvent.title = result.description;
                 calEvent.location = {
-                    latitude: result.lat,
-                    longitude: result.lng,
+                    lat: result.lat,
+                    lng: result.lng,
                     name: result.address,
                     description: result.description
                 }
