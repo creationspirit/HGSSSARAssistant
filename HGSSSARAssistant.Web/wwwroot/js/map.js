@@ -32,7 +32,7 @@
             lat: parseFloat(initialMarkerLat, 10),
             lng: parseFloat(initialMarkerLng, 10)
           },
-          map: map,
+          map: self.map,
           draggable: true
         });
         self.map.setCenter(self.marker.getPosition());

@@ -30,13 +30,22 @@ namespace HGSSSARAssistant.Web.Api
             IEnumerable<User> users = _context.GetAll();
 
             var result = users.Select(u => {
-                bool isAvailable = u.Availiabilities != null;
+                bool isAvailable = false;
                 decimal Latitude, Longitude;
+                DateTime now = DateTime.Now;
+                Location location = null;
+                
+                foreach (Availability a in u.Availiabilities) {
+                    if (a.StartTime < now && a.EndTime > now && (int) a.Day == (int) now.DayOfWeek) {
+                        isAvailable = true;
+                        location = a.Location;
+                        break;
+                    }
+                }
 
-                if (isAvailable) {
-                    var Location = u.Availiabilities.FirstOrDefault().Location;
-                    Latitude = Location.Latitude;
-                    Longitude = Location.Longitude;
+				if (isAvailable) {
+                    Latitude = location.Latitude;
+                    Longitude = location.Longitude;
                 } else {
                     Latitude = u.Address.Latitude;
                     Longitude = u.Address.Longitude;

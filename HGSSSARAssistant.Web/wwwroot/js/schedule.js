@@ -20,10 +20,10 @@ var locationPromptModal = function (initialModalData) {
     }
 
     $modal.one('shown.bs.modal', function (event) {
-        google.maps.event.trigger(singleLocationMap.map, 'resize');
         if (singleLocationMap.marker) {
             singleLocationMap.map.setCenter(singleLocationMap.marker.getPosition());
         }
+        google.maps.event.trigger(singleLocationMap.map, 'resize');
         
     });
 
@@ -136,16 +136,17 @@ var initCalendar = function (eventData) {
 
 var button = $('.js-submit');
 var userId = button.data('user-id');
-
-fetch('/Users/' + userId + '/Availabilities', {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-        "Content-Type": 'application/json'
-    }
-}).then(function (result) {
-        return result.json();
-    }).then(initCalendar)
-    .catch(function (err) {
-        initCalendar();
-});
+if (userId) {
+    fetch('/Users/' + userId + '/Availabilities', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            "Content-Type": 'application/json'
+        }
+    }).then(function (result) {
+            return result.json();
+        }).then(initCalendar)
+        .catch(function (err) {
+            initCalendar();
+    });
+}

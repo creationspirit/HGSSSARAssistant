@@ -46,7 +46,7 @@
 
             var button = $(e.target);
             var userId = button.data('user-id');
-    
+
             var eventsFromCalendar = $('#calendar').fullCalendar('clientEvents').map(function (event) {
                 var end = event.end.clone();
                 var start = event.start.clone();
@@ -54,17 +54,21 @@
                 if (start.add(1, 'day').startOf('day').isSame(end)) {
                     end = end.subtract(1, 'day').endOf('day');
                 }
-
+    
                 return {
                     startTime: event.start.toISOString(),
                     endTime: end.toISOString(),
-                    day: moment(start).day(),
-                    location: event.location
+                    day: event.start.day(),
+                    location: {
+                        description: event.location.description,
+                        name: event.location.name,
+                        latitude: event.location.lat,
+                        longitude: event.location.lng
+                    }
                 };
             });
 
             var result = { UserId: @Model.UserId, Availability: eventsFromCalendar };
-
             fetch('@Url.Action("Availability")', {
                 method: 'POST',
                 body: JSON.stringify(result),
