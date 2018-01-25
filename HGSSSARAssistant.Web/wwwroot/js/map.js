@@ -37,7 +37,6 @@ var initAddressMap = function() {
       streetViewControl: false
     });
 
-
     var initialMarkerLat = $mapMountEl.data('lat');
     var initialMarkerLng = $mapMountEl.data('lng');
 

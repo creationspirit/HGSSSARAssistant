@@ -20,12 +20,6 @@ namespace HGSSSARAssistant.Web.Models
             }
         }
 
-        public Location Location { get; set; }
-
-        public DateTime StartTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
-        public Days Day { get; set; }
+        public List<Availability> Availability { get; set; }
     }
 }

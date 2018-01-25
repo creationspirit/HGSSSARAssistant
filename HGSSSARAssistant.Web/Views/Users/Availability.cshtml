@@ -3,23 +3,15 @@
     ViewData["Title"] = "UserAvailability";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Edit</h2>
-<h4>User</h4>
+<h2>User availability schedule</h2>
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div id='calendar'></div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
+        <h3>@Model.Name</h3>
+        <div id='calendar'></div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="js-submit btn btn-info" />
+        </div>
     </div>
 </div>
 <div>
@@ -33,15 +25,73 @@
                 <h4 class="modal-title">Choose location</h4>
             </div>
             <div class="modal-body">
-                <p>One fine body&hellip;</p>
+                <div class="form-group">
+                    <input type="text" name="Description" placeholder="Enter event description..." class="js-map-description form-control" />
+                    <input type="text" name="Address" class="js-map-address form-control" readonly="readonly"/>
+                    <div class="map">
+                        <div class="js-map map__container"></div>
+                        <input name="AddressLat" class="js-map-lat" type="hidden" />
+                        <input name="AddressLng" class="js-map-lng" type="hidden" />
+                    </div>
+                </div>
             </div>
+            <input asp-for="UserId" class="form-control" type="hidden"/>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">Save changes</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript">
+        $('.js-submit').click(function (e) {
+            e.preventDefault();
+
+            var eventsFromCalendar = $('#calendar').fullCalendar('clientEvents').map(function (event) {
+                var end = event.end.clone();
+                var start = event.start.clone();
+
+                if (start.add(1, 'day').startOf('day').isSame(end)) {
+                    end = end.subtract(1, 'day').endOf('day');
+                }
+
+                return {
+                    startTime: event.start.toISOString(),
+                    endTime: end.toISOString(),
+                    day: moment(start).day(),
+                    location: event.location
+                };
+            });
+
+            var result = { UserId: @Model.UserId, Availability: eventsFromCalendar };
+
+            fetch('@Url.Action("Availability")', {
+                method: 'POST',
+                body: JSON.stringify(result),
+                credentials: 'include',
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            }).then(function () {
+                iziToast.show({
+                    title: 'Changes saved',
+                    message: 'Availability schedule was updated.',
+                    position: 'topRight',
+                    color: 'green',
+                    progressBar: false,
+                    closeOnEscape: true
+                });
+            }).catch(function () { 
+                iziToast.show({
+                    title: 'Error',
+                    message: 'Unable to update schedule!',
+                    position: 'topRight',
+                    color: 'red',
+                    progressBar: false,
+                    closeOnEscape: true
+                });
+            });
+        });
+</script>
 }

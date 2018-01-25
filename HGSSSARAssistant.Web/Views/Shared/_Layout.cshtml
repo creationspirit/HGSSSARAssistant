@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/izitoast/dist/css/iziToast.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -16,6 +17,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/izitoast/dist/css/iziToast.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -52,6 +54,7 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
+        <script src="~/lib/izitoast/dist/js/iziToast.js"></script>
         <script src="~/js/map.js" asp-append-version="true"></script>
         <script src="~/js/schedule.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
@@ -70,10 +73,11 @@
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
         <script src="~/lib/moment/min/moment.min.js" asp-append-version="true"></script>
-        <script src="~/lib/fullcalendar/dist/fullcalendar.min.js" asp-append-version="true"></script>    </environment>
+        <script src="~/lib/fullcalendar/dist/fullcalendar.min.js" asp-append-version="true"></script>
+        <script src="~/lib/izitoast/dist/js/iziToast.min.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD58tH2AwbTre09ubbb0YMY3sXXrg1lAww&callback=initMap" async defer></script>
-        
+    </environment>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD58tH2AwbTre09ubbb0YMY3sXXrg1lAww&callback=initMap" async defer></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

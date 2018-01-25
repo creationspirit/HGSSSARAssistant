@@ -36,10 +36,15 @@
 
 .map .map__container {
     height: 100%;
-    min-height: 400px;
+    min-height: 400px
 }
 
 .map-name-input {
     border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0
+    border-bottom-right-radius: 0
 }
+
+.iziToast-wrapper.iziToast-wrapper-topRight {
+    top: 50px;
+}
+
