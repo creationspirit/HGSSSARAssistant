@@ -96,7 +96,14 @@ namespace HGSSSARAssistant.Web.Models
 
         public List<AvailabilityViewModel> Availability { get; set; }
        
-        //[Display(Name = "Expertises")]
-        //public ExpertiseViewModel[] Expertise { get; set; }
+        [Display(Name = "Expertise")]
+        public List<UserExpertiseModel> Expertise { get; set; }
+    }
+
+    public class UserExpertiseModel
+    {
+        public long ExpertiseId { get; set; }
+        public String ExpertiseName { get; set; }
+        public bool Selected { get; set; }
     }
 }

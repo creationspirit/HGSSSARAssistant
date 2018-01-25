@@ -274,6 +274,16 @@ namespace HGSSSARAssistant.Web.Controllers
 
         private UserViewModel ConvertToViewModel(User user)
         {
+            List<UserExpertiseModel> userExpertises = new List<UserExpertiseModel>();
+            foreach (Expertise e in _expertiseRepository.GetAll()) {
+                userExpertises.Add(new UserExpertiseModel
+                {
+                    ExpertiseId = e.Id,
+                    ExpertiseName = e.Name,
+                    Selected = user.UserExpertise.Exists(ue => ue.ExpertiseId == e.Id)
+                });
+            }
+
             var userModel = new UserViewModel
             {
                 Id = user.Id,
@@ -291,7 +301,8 @@ namespace HGSSSARAssistant.Web.Controllers
                 RoleName = user.Role.Name,
                 Address = user.Address.Name,
                 AddressLat = user.Address.Latitude,
-                AddressLng = user.Address.Longitude
+                AddressLng = user.Address.Longitude,
+                Expertise = userExpertises
             };
 
             return userModel;

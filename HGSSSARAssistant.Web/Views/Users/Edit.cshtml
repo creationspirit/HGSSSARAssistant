@@ -65,7 +65,7 @@
             </div>
 
             <div class="form-group">
-                <input asp-for="Address" class="js-map-address form-control" />
+                <input asp-for="Address" class="js-map-address map-name-input form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
                 <div class="map">
                     <div class="js-map map__container" data-lat="@Model.AddressLat" data-lng="@Model.AddressLng"></div>
