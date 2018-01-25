@@ -38,3 +38,7 @@
     height: 100%;
     min-height: 200px;
 }
+
+.iziToast-wrapper.iziToast-wrapper-topRight {
+    top: 50px;
+}

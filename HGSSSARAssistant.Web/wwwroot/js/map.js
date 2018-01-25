@@ -25,7 +25,7 @@ var initAddressMap = function() {
       zoom: 10
     });
 
-
+    window.addressMap = map;
 
     map.addListener('click', function(e) {
         if (marker) {

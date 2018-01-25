@@ -13,5 +13,6 @@ namespace HGSSSARAssistant.Core.Repositories
         IEnumerable<User> GetAvailableUsers(DateTime time);
         IEnumerable<User> GetAvailableUsers(Availability availability);
         User GetUserByEmail(String email);
+        IEnumerable<Availability> GetAvailabilitiesByUser(long id);
     }
 }

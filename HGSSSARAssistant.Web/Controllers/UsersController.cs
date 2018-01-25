@@ -5,6 +5,8 @@ using HGSSSARAssistant.Core;
 using System.Collections.Generic;
 using HGSSSARAssistant.Core.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
@@ -154,6 +156,23 @@ namespace HGSSSARAssistant.Web.Controllers
             return View(userModel);
         }
 
+        [HttpGet("[controller]/{id}/Availabilities")]
+        public JsonResult UserAvailabilities(long id)
+        {
+            object result = _context.GetAvailabilitiesByUser(id).Select(a => new {
+                title = a.Location.Name,
+                start = a.StartTime,
+                end = a.EndTime,
+                location = new {
+                    lat = a.Location.Latitude,
+                    lng = a.Location.Longitude
+                }
+            });
+            //List<Availability> availabilities = new List<Availability>(_context.GetAvailabilitiesByUser(id));
+
+            return Json(result);
+        }
+
         // GET: Users/Availability/5
         public ActionResult Availability(long id)
         {
@@ -164,44 +183,80 @@ namespace HGSSSARAssistant.Web.Controllers
                 return NotFound();
             }
 
-            UserAvailabilityViewModel availabilityModel = ConvertToAvailabilityModel(user);
-
+            var availabilityModel = new UserAvailabilityViewModel
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Availability = user.Availiabilities ?? new List<Availability>()
+            };
+           
             return View(availabilityModel);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Availability(long id, UserAvailabilityViewModel availabilityModel)
-        //{
-        //    if (id != availabilityModel.UserId)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost("[controller]/Availability/{id}")]
+        public ActionResult Availability(long id, [FromBody] UserAvailabilityViewModel viewModel)
+        {
+            if (id != viewModel.UserId)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var user = ConvertToModel(availabilityModel);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    User user = _context.GetById(viewModel.UserId);
 
-        //            _context.Update(user);
-        //            _context.Save();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!UserExists(availabilityModel.UserId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(availabilityModel);
-        //}
+                    if (user == null) user = new User();
+                    if (user.Availiabilities == null) user.Availiabilities = new List<Availability>();
+                    else user.Availiabilities.ForEach(a => _availabilityRepository.Delete(a.Id));
+
+                    viewModel.Availability.ForEach(a => {
+                        Location location = new Location
+                        {
+                            Latitude = a.Location.Latitude,
+                            Longitude = a.Location.Longitude,
+                            Name = a.Location.Name,
+                            Description = a.Location.Description
+                        };
+
+                        _locationRepository.Insert(location);
+                        _locationRepository.Save();
+
+                        Availability availability = new Availability
+                        {
+                            Day = a.Day,
+                            StartTime = a.StartTime,
+                            EndTime = a.EndTime,
+                            Location = location
+                        };
+
+                        _availabilityRepository.Insert(availability);
+                        _availabilityRepository.Save();
+
+                        user.Availiabilities.Add(availability);
+                    });
+
+                    _context.Update(user);
+                    _context.Save();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(viewModel.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return Ok(201);
+            }
+
+            return BadRequest();
+        }
 
         // GET: Users/Delete/5
         public ActionResult Delete(long id)
@@ -284,18 +339,6 @@ namespace HGSSSARAssistant.Web.Controllers
             };
 
             return userModel;
-        }
-
-        private UserAvailabilityViewModel ConvertToAvailabilityModel(User user)
-        {
-            var availabilityModel = new UserAvailabilityViewModel
-            {
-                UserId = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName
-            };
-
-            return availabilityModel;
         }
     }
 }

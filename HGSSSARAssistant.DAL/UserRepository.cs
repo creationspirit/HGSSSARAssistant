@@ -22,6 +22,7 @@ namespace HGSSSARAssistant.DAL
                 .Include(u => u.Category)
                 .Include(u => u.Role)
                 .Include(u => u.Address)
+                .Include(u => u.Availiabilities).ThenInclude(a => a.Location)
                 .Include(u => u.Station);
         }
 
@@ -80,6 +81,11 @@ namespace HGSSSARAssistant.DAL
         public User GetUserByEmail(string email)
         {
             return _userEntity.Single(user => user.Email.Equals(email));
+        }
+
+        public IEnumerable<Availability> GetAvailabilitiesByUser(long id)
+        {
+            return _userEntity.Single(u => u.Id == id).Availiabilities;
         }
     }
 }
