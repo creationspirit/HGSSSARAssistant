@@ -78,6 +78,7 @@ namespace HGSSSARAssistant.Web.Api
 
             try
             {
+                User result = _context.Update(user);
                 _context.Save();
             }
             catch (DbUpdateConcurrencyException)

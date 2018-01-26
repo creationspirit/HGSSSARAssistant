@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,8 +26,8 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
         }
 
         [Fact]
-        public async Task UsersReturnsOkResponse()
-        {
+        public async Task GetUsersReturnsOkResponse()
+        {            
             var response = await _context.Client.GetAsync("/api/users");
 
             response.EnsureSuccessStatusCode();
@@ -35,77 +36,76 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
         }
 
         [Fact]
-        public async Task UsersReturnsAViewResultWithAListOfUsers()
+        public void PostUserWithInvalidModelReturnsBadRequest()
         {
             // Arrange
             var mockRepo = new Mock<IUserRepository>();
-            mockRepo.Setup(repo => repo.GetAll()).Returns(GetUsers());
-            //mockRepo.Setup(repo => repo.GetAvailableUsers(new DateTime())).Returns(GetUsers());
             var controller = new UsersController(mockRepo.Object);
+            controller.ModelState.AddModelError("Email", "Required");
 
             // Act
-            var result = controller.GetUsers();
+            var result = controller.PostUser(new User());
 
             // Assert
-            var viewResult = Assert.IsType<JsonResult>(result);
-            //var model = Assert.IsAssignableFrom<IEnumerable<StormSessionViewModel>>(
-            //    viewResult.ViewData.Model);
-            //Assert.Equal(2, model.Count());
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<SerializableError>(badRequestResult.Value);
         }
 
-        private List<User> GetUsers()
+        [Fact]
+        public void PostUserWithValidModelReturnsCreated()
         {
-            var sessions = new List<User>
+            // Arrange
+            var mockRepo = new Mock<IUserRepository>();
+            var controller = new UsersController(mockRepo.Object);
+            var user = new User()
             {
-                new User()
+                Id = 1,
+                FirstName = "Matej",
+                LastName = "Janjic",
+                Address = new Location()
                 {
                     Id = 1,
-                    FirstName = "Matej",
-                    LastName = "Janjic",
-                    Address = new Location()
+                    Latitude = 53.4564M,
+                    Longitude = 34.2324M,
+                    Name = "Kuca",
+                    Description = "Tu zivin"
+                },
+                Category = new Category
+                {
+                    Id = 1,
+                    Name = "Planinar"
+                },
+                Email = "a@b.com",
+                Password = "veoma dobra lozinka",
+                Role = new Role
+                {
+                    Id = 1,
+                    Name = "Admin"
+                },
+                AdditionalContactNumbers = "14124124",
+                AndroidPushId = "a1911421jasd2rj",
+                ContactNumber = "141412414",
+                Station = new Station
+                {
+                    Id = 1,
+                    Name = "Stanica ZG",
+                    Location = new Location
                     {
-                        Id = 1,
-                        Latitude = 53.4564M,
-                        Longitude = 34.2324M,
-                        Name = "Kuca",
-                        Description = "Tu zivin"
-                    },
-                    Category = new Category
-                    {
-                        Id = 1,
-                        Name = "Planinar"
-                    },
-                    Email = "a@b.com",
-                    Password = "veoma dobra lozinka",
-                    Role = new Role
-                    {
-                        Id = 1,
-                        Name = "Admin"
-                    },
-                    AdditionalContactNumbers = "14124124",
-                    AndroidPushId = "a1911421jasd2rj",
-                    ContactNumber = "141412414",
-                    Station = new Station
-                    {
-                        Id = 1,
-                        Name = "Stanica ZG",
-                        Location = new Location
-                        {
-                            Id = 2,
-                            Name = "Lokacija stanice",
-                            Description = "Tu se stanica nalazi",
-                            Latitude = 53.131M,
-                            Longitude = 12.1312M
-                        }
-                    },
-                    Availiabilities = new List<Availability>
+                        Id = 2,
+                        Name = "Lokacija stanice",
+                        Description = "Tu se stanica nalazi",
+                        Latitude = 53.131M,
+                        Longitude = 12.1312M
+                    }
+                },
+                Availiabilities = new List<Availability>
                     {
                         new Availability()
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = new DateTime(),
-                            EndTime = new DateTime(),
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddDays(4),
                             Location = new Location
                             {
                                 Id = 3,
@@ -115,71 +115,242 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
                                 Longitude = 67.1312M
                             }
                         }
-                    }                    
-                },
-                new User()
+                    }
+            };
+
+            // Act
+            var result = controller.PostUser(user);
+
+            // Assert
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            Assert.IsType<User>(createdResult.Value);
+            Assert.Equal(user, createdResult.Value);
+        }
+
+        [Fact]
+        public void PutUserWithValidModelReturnsNoContent()
+        {
+            // Arrange
+            var mockRepo = new Mock<IUserRepository>();            
+            var controller = new UsersController(mockRepo.Object);
+            var user = new User()
+            {
+                Id = 1,
+                FirstName = "Matej",
+                LastName = "Janjic",
+                Address = new Location()
                 {
-                    Id = 2,
-                    FirstName = "Luka",
-                    LastName = "Lazanja",
-                    Address = new Location()
-                    {
-                        Id = 4,
-                        Latitude = 23.4564M,
-                        Longitude = 24.2324M,
-                        Name = "Kuca",
-                        Description = "Tu zivin"
-                    },
-                    Category = new Category
+                    Id = 1,
+                    Latitude = 53.4564M,
+                    Longitude = 34.2324M,
+                    Name = "Kuca",
+                    Description = "Tu zivin"
+                },
+                Category = new Category
+                {
+                    Id = 1,
+                    Name = "Planinar"
+                },
+                Email = "a@b.com",
+                Password = "veoma dobra lozinka",
+                Role = new Role
+                {
+                    Id = 1,
+                    Name = "Admin"
+                },
+                AdditionalContactNumbers = "14124124",
+                AndroidPushId = "a1911421jasd2rj",
+                ContactNumber = "141412414",
+                Station = new Station
+                {
+                    Id = 1,
+                    Name = "Stanica ZG",
+                    Location = new Location
                     {
                         Id = 2,
-                        Name = "Speleolog"
-                    },
-                    Email = "b@c.com",
-                    Password = "veoma dobra lozinka",
-                    Role = new Role
-                    {
-                        Id = 2,
-                        Name = "Spasavatelj"
-                    },
-                    AdditionalContactNumbers = "14124124",
-                    AndroidPushId = "a1911421jasd2rj",
-                    ContactNumber = "141412414",
-                    Station = new Station
-                    {
-                        Id = 2,
-                        Name = "Stanica ZD",
-                        Location = new Location
-                        {
-                            Id = 5,
-                            Name = "Lokacija stanice u zd",
-                            Description = "Tu se stanica nalazi",
-                            Latitude = 23.131M,
-                            Longitude = 32.1312M
-                        }
-                    },
-                    Availiabilities = new List<Availability>
+                        Name = "Lokacija stanice",
+                        Description = "Tu se stanica nalazi",
+                        Latitude = 53.131M,
+                        Longitude = 12.1312M
+                    }
+                },
+                Availiabilities = new List<Availability>
                     {
                         new Availability()
                         {
-                            Id = 2,
+                            Id = 1,
                             Day = Days.Mon,
-                            StartTime = new DateTime(),
-                            EndTime = new DateTime(),
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddDays(4),
                             Location = new Location
                             {
-                            Id = 6,
-                                Name = "PosoZD",
-                                Description = "Tu ne radin nista",
+                                Id = 3,
+                                Name = "Poso",
+                                Description = "Tu radin",
                                 Latitude = 34.131M,
-                                Longitude = 17.1312M
+                                Longitude = 67.1312M
                             }
                         }
-                    },
-
-                }
+                    }
             };
-            return sessions;
+            mockRepo.Object.Insert(user);
+            user = new User()
+            {
+                Id = 1,
+                FirstName = "Luka",
+                LastName = "Lazanja",
+                Address = new Location()
+                {
+                    Id = 1,
+                    Latitude = 53.4564M,
+                    Longitude = 34.2324M,
+                    Name = "Kuca",
+                    Description = "Tu zivin"
+                },
+                Category = new Category
+                {
+                    Id = 1,
+                    Name = "Planinar"
+                },
+                Email = "a@b.com",
+                Password = "veoma dobra lozinka",
+                Role = new Role
+                {
+                    Id = 1,
+                    Name = "Admin"
+                },
+                AdditionalContactNumbers = "14124124",
+                AndroidPushId = "a1911421jasd2rj",
+                ContactNumber = "141412414",
+                Station = new Station
+                {
+                    Id = 1,
+                    Name = "Stanica ZG",
+                    Location = new Location
+                    {
+                        Id = 2,
+                        Name = "Lokacija stanice",
+                        Description = "Tu se stanica nalazi",
+                        Latitude = 53.131M,
+                        Longitude = 12.1312M
+                    }
+                },
+                Availiabilities = new List<Availability>
+                    {
+                        new Availability()
+                        {
+                            Id = 1,
+                            Day = Days.Mon,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddDays(4),
+                            Location = new Location
+                            {
+                                Id = 3,
+                                Name = "Poso",
+                                Description = "Tu radin",
+                                Latitude = 34.131M,
+                                Longitude = 67.1312M
+                            }
+                        }
+                    }
+            };
+
+            // Act
+            var result = controller.PutUser(1, user);
+
+            // Assert
+            var createdResult = Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public void DeleteNonExistingUserReturnsNotFound()
+        {
+            // Arrange
+            var mockRepo = new Mock<IUserRepository>();
+            mockRepo.Setup(repo => repo.Exists(1)).Returns(false);
+            var controller = new UsersController(mockRepo.Object);
+
+            // Act
+            var result = controller.DeleteUser(1);
+
+            // Assert
+            var createdResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DeleteExistingUserReturnsOk()
+        {
+            // Arrange
+            var mockRepo = new Mock<IUserRepository>();
+            mockRepo.Setup(repo => repo.Exists(1)).Returns(true);
+            var controller = new UsersController(mockRepo.Object);
+            var user = new User()
+            {
+                Id = 1,
+                FirstName = "Matej",
+                LastName = "Janjic",
+                Address = new Location()
+                {
+                    Id = 1,
+                    Latitude = 53.4564M,
+                    Longitude = 34.2324M,
+                    Name = "Kuca",
+                    Description = "Tu zivin"
+                },
+                Category = new Category
+                {
+                    Id = 1,
+                    Name = "Planinar"
+                },
+                Email = "a@b.com",
+                Password = "veoma dobra lozinka",
+                Role = new Role
+                {
+                    Id = 1,
+                    Name = "Admin"
+                },
+                AdditionalContactNumbers = "14124124",
+                AndroidPushId = "a1911421jasd2rj",
+                ContactNumber = "141412414",
+                Station = new Station
+                {
+                    Id = 1,
+                    Name = "Stanica ZG",
+                    Location = new Location
+                    {
+                        Id = 2,
+                        Name = "Lokacija stanice",
+                        Description = "Tu se stanica nalazi",
+                        Latitude = 53.131M,
+                        Longitude = 12.1312M
+                    }
+                },
+                Availiabilities = new List<Availability>
+                    {
+                        new Availability()
+                        {
+                            Id = 1,
+                            Day = Days.Mon,
+                            StartTime = DateTime.Now,
+                            EndTime = DateTime.Now.AddDays(4),
+                            Location = new Location
+                            {
+                                Id = 3,
+                                Name = "Poso",
+                                Description = "Tu radin",
+                                Latitude = 34.131M,
+                                Longitude = 67.1312M
+                            }
+                        }
+                    }
+            };
+            mockRepo.Object.Insert(user);
+
+            // Act
+            var result = controller.DeleteUser(user.Id);
+
+            // Assert
+            var createdResult = Assert.IsType<OkResult>(result);
         }
     }
 }
