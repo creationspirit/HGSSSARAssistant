@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HGSSSARAssistant.IntegrationTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test"
+      }
+    }
+  }
+}
