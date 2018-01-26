@@ -19,7 +19,7 @@
         lat: 45.815,
         lng: 15.982
       },
-      zoom: 12,
+      zoom: 10,
       streetViewControl: false
     });
 

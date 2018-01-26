@@ -1,6 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "SAR Assistant";
 }
 
 
-<p>Nešto poslajsat lijepo tu.</p>
+<div class="jumbotron hero">
+  <h1>SAR Assistant</h1>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="media">
+          <div class="media-left">
+            <a asp-area="" asp-controller="Users" asp-action="Index">
+              <img class="media-object" src="/images/firefighter.png" alt="Otline icon of a firefighter">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Rescuers</h4>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="media">
+          <div class="media-left">
+            <a asp-area="" asp-controller="Actions" asp-action="Index">
+              <img class="media-object" src="/images/helicopter.png" alt="Otline icon of a rescue helicopter">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Actions</h4>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="media">
+          <div class="media-left">
+            <a href="" target="_blank">
+              <img class="media-object" src="/images/emergency-call.png" alt="Otline icon of a phone calling a emergency number">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Mobile app</h4>
+          </div>
+        </div>
+    </div>
+</div>

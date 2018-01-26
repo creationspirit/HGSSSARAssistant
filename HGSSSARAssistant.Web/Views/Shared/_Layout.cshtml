@@ -30,12 +30,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">HGSSSARAssistant.Web</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">HGSS - SARAssistant</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
-                    <li><a asp-area="" asp-controller="Actions" asp-action="Index">Actions</a></li>
+                    <li><a asp-area="" asp-controller="ActionTypes" asp-action="Index">Action Types</a></li>
+                    <li><a asp-area="" asp-controller="MessageTemplates" asp-action="Index">Message Templates</a></li>
                     <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
@@ -46,7 +46,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - HGSSSARAssistant.Web</p>
+            <p>&copy; 2018 - HGSS - SAR Assistant</p>
         </footer>
     </div>
     <environment include="Development">
