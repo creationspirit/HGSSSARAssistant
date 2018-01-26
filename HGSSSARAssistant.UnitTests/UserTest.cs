@@ -33,7 +33,7 @@ namespace HGSSSARAssistant.UnitTests
             availabilities.Add(new Availability
             {
 				Id = 1,
-                Day = Days.Mon,
+                Day = DateTime.Now.DayOfWeek,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
                 Location = new Location {

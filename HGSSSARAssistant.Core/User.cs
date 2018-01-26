@@ -21,5 +21,31 @@ namespace HGSSSARAssistant.Core
 
         public List<Availability> Availiabilities { get; set; }
         public List<UserExpertise> UserExpertise { get; set; }
+
+
+        public bool IsAvailable() {
+            return this.GetCurrentAvailabilityPeriod() != null;
+        }
+
+        public Location GetCurrentLocation() {
+            Availability currentAvailability = this.GetCurrentAvailabilityPeriod();
+            if (currentAvailability != null) {
+                return currentAvailability.Location;
+            } else {
+                return Address;
+            }
+        }
+
+        private Availability GetCurrentAvailabilityPeriod() {
+            DateTime now = DateTime.Now;
+            foreach (Availability a in this.Availiabilities)
+            {
+                if (a.StartTime < now && a.EndTime > now && (int)a.Day == (int)now.DayOfWeek)
+                {
+                    return a;
+                }
+            }
+            return null;
+        }
     }
 }
