@@ -6,24 +6,13 @@ namespace HGSSSARAssistant.Core
     public class Availability : Entity
     {
         public Location Location { get; set; }
+
         private DateTime startTime;
         public DateTime StartTime
         {
             get
             {
-                DateTime refDateTime = DateTime.Now;
-                int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
-                refDateTime = this.startTime.AddDays((double)dayDiff);
-
-                return new DateTime(
-                    refDateTime.Year,
-                    refDateTime.Month,
-                    refDateTime.Day,
-                    startTime.Hour,
-                    startTime.Minute,
-                    startTime.Second,
-                    startTime.Millisecond,
-                    startTime.Kind);
+                return NormalizeAvailibilityPeriod(startTime);
             }
             set
             {
@@ -35,19 +24,7 @@ namespace HGSSSARAssistant.Core
         public DateTime EndTime {
             get
             {
-                DateTime refDateTime = DateTime.Now;
-                int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
-                refDateTime = this.endTime.AddDays((double)dayDiff);
-
-                return new DateTime(
-                    refDateTime.Year,
-                    refDateTime.Month,
-                    refDateTime.Day,
-                    endTime.Hour,
-                    endTime.Minute,
-                    endTime.Second,
-                    endTime.Millisecond,
-                    endTime.Kind);
+                return NormalizeAvailibilityPeriod(endTime);
             }
             set
             {
@@ -55,6 +32,22 @@ namespace HGSSSARAssistant.Core
             }
         }
         public Days Day { get; set; }
+
+		private DateTime NormalizeAvailibilityPeriod(DateTime period) {
+            DateTime refDateTime = DateTime.Now;
+            int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
+            refDateTime = refDateTime.AddDays((double)dayDiff);
+
+            return new DateTime(
+                refDateTime.Year,
+                refDateTime.Month,
+                refDateTime.Day,
+                period.Hour,
+                period.Minute,
+                period.Second,
+                period.Millisecond,
+                period.Kind);
+		}
     }
 
     public enum Days
@@ -67,4 +60,5 @@ namespace HGSSSARAssistant.Core
         Sat = 6,
         Sun = 7
     }
+
 }

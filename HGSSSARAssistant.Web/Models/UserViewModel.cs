@@ -79,20 +79,7 @@ namespace HGSSSARAssistant.Web.Models
         public String RoleName { get; set; }
 
         [Display(Name = "Is Available?")]
-        public bool IsAvailable
-        {
-            get
-            {
-                if (Availability == null) return false;
-
-                DateTime now = new DateTime();
-                foreach(AvailabilityViewModel period in Availability)
-                {
-                    if (period.StartTime <= now && period.EndTime >= now) return true;
-                }
-                return false;
-            }
-        }
+        public bool IsAvailable { get; set; }
 
         public List<AvailabilityViewModel> Availability { get; set; }
        

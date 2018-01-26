@@ -160,7 +160,7 @@ namespace HGSSSARAssistant.Web.Controllers
         public JsonResult UserAvailabilities(long id)
         {
             object result = _context.GetAvailabilitiesByUser(id).Select(a => new {
-                title = a.Location.Name,
+                title = a.Location.Description,
                 start = a.StartTime,
                 end = a.EndTime,
                 location = new {
@@ -356,7 +356,8 @@ namespace HGSSSARAssistant.Web.Controllers
                 RoleName = user.Role.Name,
                 Address = user.Address.Name,
                 AddressLat = user.Address.Latitude,
-                AddressLng = user.Address.Longitude
+                AddressLng = user.Address.Longitude,
+                IsAvailable = user.IsAvailable()
                 //Expertise = userExpertises
             };
 
