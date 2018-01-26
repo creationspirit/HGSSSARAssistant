@@ -1,6 +1,5 @@
 # HGSSSARAssistant
 
  - ASP.NET Core 2.0
- - EntityFramework Core because of issues with NHibernate Core:
-   - https://github.com/nhibernate/nhibernate-core/issues/1368
-   - https://github.com/nunit/nunit3-vs-adapter/issues/356
+ - NHibernate lacks support for ASP:NET Core 2.0:
+    - https://github.com/nhibernate/nhibernate-core/issues/954

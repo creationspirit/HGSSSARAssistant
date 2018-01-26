@@ -48,3 +48,19 @@
     top: 50px;
 }
 
+.hero {
+    background-image: url('/images/SAR.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #FAFAFA;
+    padding: 120px 0;
+}
+
+.media {
+    margin-bottom: 24px;
+}
+
+.media .media-object {
+    max-width: 48px;
+}

@@ -26,7 +26,7 @@ namespace HGSSSARAssistant.Web
         {
             services.AddMvc();
 
-            var connection = @"Server=horton.elephantsql.com;Port=5432;Database=epxczvqp;Username=epxczvqp;Password=EWwJJvXiGKisWmOuH4WC3FRqxUCV49ye;";
+            var connection = Configuration.GetConnectionString("Elephant");
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(connection));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -46,6 +46,8 @@ namespace HGSSSARAssistant.Web
             services.AddTransient<IMessageTemplateRepository, MessageTemplateRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddTransient<IActionNotifier, ActionPushNotifier>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
