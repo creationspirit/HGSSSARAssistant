@@ -13,14 +13,13 @@ namespace HGSSSARAssistant.UnitTests
             this._location = new Location();
         }
         [Fact]
-        public void CreateLocation()
+        public void ShouldCreateLocation()
         {
-            Location location = new Location();
-            Assert.NotNull(location);
+            Assert.NotNull(this._location);
         }
 
         [Fact]
-        public void SetLatitude()
+        public void ShouldSetLatitude()
         {
             decimal expected = 16.589m;
             this._location.Latitude = expected;
@@ -29,7 +28,7 @@ namespace HGSSSARAssistant.UnitTests
         }
 
         [Fact]
-        public void SetLongitude()
+        public void ShouldSetLongitude()
         {
             decimal expected = 68.009m;
             this._location.Longitude = expected;
