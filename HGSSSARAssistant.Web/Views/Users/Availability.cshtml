@@ -42,6 +42,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script type="text/javascript">
         $('.js-submit').click(function (e) {
+            var $button = $(e.target);
             e.preventDefault();
 
             var button = $(e.target);
@@ -68,6 +69,7 @@
                 };
             });
 
+            $button.prop('disabled', true);
             var result = { UserId: @Model.UserId, Availability: eventsFromCalendar };
             fetch('@Url.Action("Availability")', {
                 method: 'POST',
@@ -77,6 +79,8 @@
                     "Content-Type": 'application/json'
                 }
             }).then(function () {
+                $button.prop('disabled', false);
+                
                 iziToast.show({
                     title: 'Changes saved',
                     message: 'Availability schedule was updated.',
@@ -86,6 +90,8 @@
                     closeOnEscape: true
                 });
             }).catch(function () {
+                $button.prop('disabled', false);
+    
                 iziToast.show({
                     title: 'Error',
                     message: 'Unable to update schedule!',

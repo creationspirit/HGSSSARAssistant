@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
 using HGSSSARAssistant.DAL.EF;
+using HGSSSARAssistant.Web.Services;
 
 namespace HGSSSARAssistant.Web.Api
 {
@@ -15,10 +16,12 @@ namespace HGSSSARAssistant.Web.Api
     public class ActionsController : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly IActionNotifier _notifier;
 
-        public ActionsController(ApplicationContext context)
+        public ActionsController(ApplicationContext context, ActionPushNotifier notifier)
         {
             _context = context;
+            _notifier = notifier;
         }
 
         // GET: api/Actions
@@ -93,7 +96,13 @@ namespace HGSSSARAssistant.Web.Api
 
             _context.Actions.Add(action);
             await _context.SaveChangesAsync();
-
+            foreach(User u in action.InvitedRescuers) {
+                try {
+					this._notifier.SendNotification(u, );
+                } catch(Exception e) {
+                    // User does not have an app bound to his account
+                }
+            }
             return CreatedAtAction("GetAction", new { id = action.Id }, action);
         }
 
