@@ -98,7 +98,7 @@ namespace HGSSSARAssistant.Web.Api
             await _context.SaveChangesAsync();
             foreach(User u in action.InvitedRescuers) {
                 try {
-					this._notifier.SendNotification(u, );
+					this._notifier.SendNotification(u, "");
                 } catch(Exception e) {
                     // User does not have an app bound to his account
                 }

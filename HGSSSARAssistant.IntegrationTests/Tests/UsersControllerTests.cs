@@ -35,7 +35,7 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
         }
 
         [Fact]
-        public Task UsersReturnsAViewResultWithAListOfUsers()
+        public async Task UsersReturnsAViewResultWithAListOfUsers()
         {
             // Arrange
             var mockRepo = new Mock<IUserRepository>();
