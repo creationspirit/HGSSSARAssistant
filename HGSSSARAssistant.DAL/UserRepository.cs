@@ -84,8 +84,8 @@ namespace HGSSSARAssistant.DAL
         }
 
         public IEnumerable<Availability> GetAvailabilitiesByUser(long id)
-        {
-            return _userEntity.Single(u => u.Id == id).Availiabilities;
+        {            
+                return _userEntity.Single(u => u.Id == id).Availiabilities;
         }
     }
 }

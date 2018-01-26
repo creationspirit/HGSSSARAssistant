@@ -16,7 +16,6 @@ namespace HGSSSARAssistant.Core
 
 		public Location Address { get; set; }
         public Station Station { get; set; }
-        public Location Location { get; set; }
         public Category Category { get; set; }
         public Role Role { get; set; }
 

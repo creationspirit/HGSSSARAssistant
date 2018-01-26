@@ -39,7 +39,7 @@ namespace HGSSSARAssistant.DAL
         public T Insert(T entity)
         {
             T resultEntity = _entitySet.Add(entity).Entity;
-
+           
             return resultEntity;
         }
         public T Update(T entity)

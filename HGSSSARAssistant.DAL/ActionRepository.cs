@@ -2,9 +2,9 @@
 using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace HGSSSARAssistant.DAL
 {
@@ -12,12 +12,17 @@ namespace HGSSSARAssistant.DAL
     {
         private ApplicationContext _context;
 
-        private DbSet<Core.Action> _actionEntity;
+        private IIncludableQueryable<Core.Action, ActionType> _actionEntity;
 
         public ActionRepository(ApplicationContext context) : base(context)
         {
             this._context = context;
-            this._actionEntity = context.Set<Core.Action>();
+            this._actionEntity = context.Actions
+                .Include(a => a.Leader)
+                .Include(a => a.Location)
+                .Include(a => a.InvitedRescuers)
+                .Include(a => a.AttendedRescuers)
+                .Include(a => a.ActionType);
         }
 
         public void Dispose()
@@ -27,7 +32,7 @@ namespace HGSSSARAssistant.DAL
 
         public Core.Action GetActionByName(string name)
         {
-            throw new System.NotImplementedException();
+            return _actionEntity.SingleOrDefault(a => a.Name.Equals(name));
         }
     }
 }
