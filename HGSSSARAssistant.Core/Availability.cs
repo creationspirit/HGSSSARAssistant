@@ -6,46 +6,52 @@ namespace HGSSSARAssistant.Core
     public class Availability : Entity
     {
         public Location Location { get; set; }
-        public DateTime StartTime {
-            get {
+        private DateTime startTime;
+        public DateTime StartTime
+        {
+            get
+            {
                 DateTime refDateTime = DateTime.Now;
-                int dayDiff = (int) this.Day - (int) refDateTime.DayOfWeek;
-                refDateTime = this.StartTime.AddDays((double) dayDiff);
+                int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
+                refDateTime = this.startTime.AddDays((double)dayDiff);
 
                 return new DateTime(
                     refDateTime.Year,
                     refDateTime.Month,
                     refDateTime.Day,
-                    this.StartTime.Hour,
-                    this.StartTime.Minute,
-                    this.StartTime.Second,
-                    this.StartTime.Millisecond,
-                    this.StartTime.Kind);
+                    startTime.Hour,
+                    startTime.Minute,
+                    startTime.Second,
+                    startTime.Millisecond,
+                    startTime.Kind);
             }
-            set {
-                this.StartTime = value;
+            set
+            {
+                startTime = value;
             }
         }
+
+        private DateTime endTime;
         public DateTime EndTime {
             get
             {
                 DateTime refDateTime = DateTime.Now;
                 int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
-                refDateTime = this.EndTime.AddDays((double)dayDiff);
+                refDateTime = this.endTime.AddDays((double)dayDiff);
 
                 return new DateTime(
                     refDateTime.Year,
                     refDateTime.Month,
                     refDateTime.Day,
-                    this.EndTime.Hour,
-                    this.EndTime.Minute,
-                    this.EndTime.Second,
-                    this.EndTime.Millisecond,
-                    this.EndTime.Kind);
+                    endTime.Hour,
+                    endTime.Minute,
+                    endTime.Second,
+                    endTime.Millisecond,
+                    endTime.Kind);
             }
             set
             {
-                this.EndTime = value;
+                endTime = value;
             }
         }
         public Days Day { get; set; }
