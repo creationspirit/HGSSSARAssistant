@@ -20,7 +20,7 @@ namespace HGSSSARAssistant.IntegrationTests.Fixture
 
         private void SetupClient()
         {
-            _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            _server = new TestServer(new WebHostBuilder().UseEnvironment("Test").UseStartup<Startup>());
             Client = _server.CreateClient();
         }
     }
