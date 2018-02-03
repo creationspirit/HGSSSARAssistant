@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
 namespace HGSSSARAssistant.Core
 {
@@ -23,12 +22,12 @@ namespace HGSSSARAssistant.Core
         public List<UserExpertise> UserExpertise { get; set; }
 
 
-        public bool IsAvailable() {
-            return this.GetCurrentAvailabilityPeriod() != null;
+        public bool IsAvailable(DateTime epoch) {
+            return this.GetCurrentAvailabilityPeriod(epoch) != null;
         }
 
-        public Location GetCurrentLocation() {
-            Availability currentAvailability = this.GetCurrentAvailabilityPeriod();
+        public Location GetLocationAtTime(DateTime epoch) {
+            Availability currentAvailability = this.GetCurrentAvailabilityPeriod(epoch);
             if (currentAvailability != null) {
                 return currentAvailability.Location;
             } else {
@@ -36,11 +35,10 @@ namespace HGSSSARAssistant.Core
             }
         }
 
-        private Availability GetCurrentAvailabilityPeriod() {
-            DateTime now = DateTime.Now;
+        private Availability GetCurrentAvailabilityPeriod(DateTime epoch) {
             foreach (Availability a in this.Availiabilities)
             {
-                if (a.StartTime < now && a.EndTime > now && (int)a.Day == (int)now.DayOfWeek)
+                if (a.StartTime < epoch.TimeOfDay && a.EndTime > epoch.TimeOfDay && (int)a.Day == (int)epoch.DayOfWeek)
                 {
                     return a;
                 }

@@ -179,8 +179,8 @@ namespace HGSSSARAssistant.Web
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(4),
+                            StartTime = new TimeSpan(12, 0, 0),
+                            EndTime = new TimeSpan(15, 0, 0),
                             Location = new Location
                             {
                                 Id = 3,
@@ -239,8 +239,8 @@ namespace HGSSSARAssistant.Web
                         {
                             Id = 2,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(2),
+                            StartTime = new TimeSpan(12, 0, 0),
+                            EndTime = new TimeSpan(15, 0, 0),
                             Location = new Location
                             {
                             Id = 6,

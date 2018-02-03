@@ -1,64 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// The TimeSpan structure can also be used to represent the time of day,
+// but only if the time is unrelated to a particular date.
+// https://msdn.microsoft.com/en-us/library/system.timespan(v=vs.110).aspx
+
 namespace HGSSSARAssistant.Core
 {
     public class Availability : Entity
     {
         public Location Location { get; set; }
 
-        private DateTime startTime;
-        public DateTime StartTime
+        private TimeSpan startTime;
+        public TimeSpan StartTime
         {
             get
             {
-                return NormalizeAvailibilityPeriod(startTime);
+                return startTime;
             }
             set
             {
+                if (value >= endTime) {
+                    throw new InvalidOperationException("Availability period cannot begin before it has ended.");
+                }
                 startTime = value;
             }
         }
 
-        private DateTime endTime;
-        public DateTime EndTime {
+        private TimeSpan endTime;
+        public TimeSpan EndTime
+        {
             get
             {
-                return NormalizeAvailibilityPeriod(endTime);
+                return endTime;
             }
             set
             {
+                if (value <= startTime)
+                {
+                    throw new InvalidOperationException("Availability period cannot end before it has begun.");
+                }
                 endTime = value;
             }
         }
+
         public Days Day { get; set; }
-
-		private DateTime NormalizeAvailibilityPeriod(DateTime period) {
-            DateTime refDateTime = DateTime.Now;
-            int dayDiff = (int)this.Day - (int)refDateTime.DayOfWeek;
-            refDateTime = refDateTime.AddDays((double)dayDiff);
-
-            return new DateTime(
-                refDateTime.Year,
-                refDateTime.Month,
-                refDateTime.Day,
-                period.Hour,
-                period.Minute,
-                period.Second,
-                period.Millisecond,
-                period.Kind);
-		}
     }
-
-    public enum Days
-    {
-        Mon = 1,
-        Tue = 2,
-        Wed = 3,
-        Thu = 4,
-        Fri = 5,
-        Sat = 6,
-        Sun = 7
-    }
-
 }

@@ -13,12 +13,10 @@ namespace HGSSSARAssistant.Web.Models
         public long Id { get; set; }
         public LocationViewModel Location { get; set; }
         [Required]
-        [DataType(DataType.DateTime)]
         [Display(Prompt = "Enter start time")]
-        public DateTime StartTime { get; set; }
+        public TimeSpan StartTime { get; set; }
         [Required]
-        [DataType(DataType.DateTime)]
         [Display(Prompt = "Enter end time")]
-        public DateTime EndTime { get; set; }
+        public TimeSpan EndTime { get; set; }
     }
 }

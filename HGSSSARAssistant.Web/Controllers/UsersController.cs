@@ -7,6 +7,7 @@ using HGSSSARAssistant.Core.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
@@ -357,7 +358,7 @@ namespace HGSSSARAssistant.Web.Controllers
                 Address = user.Address.Name,
                 AddressLat = user.Address.Latitude,
                 AddressLng = user.Address.Longitude,
-                IsAvailable = user.IsAvailable()
+                IsAvailable = user.IsAvailable(DateTime.Now)
                 //Expertise = userExpertises
             };
 

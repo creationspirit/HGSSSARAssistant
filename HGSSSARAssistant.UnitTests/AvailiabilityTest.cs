@@ -6,8 +6,9 @@ namespace HGSSSARAssistant.UnitTests
 {
     public class AvailiabilityTest
     {
-		private DateTime _timeStamp = DateTime.Now;
-        private Availability _availability;
+
+        private DateTime _timeStamp = new DateTime(2018, 1, 15, 12, 35, 14);
+        private readonly Availability _availability;
 
         public AvailiabilityTest()
         {

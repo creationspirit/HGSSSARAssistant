@@ -26,16 +26,17 @@ namespace HGSSSARAssistant.Web.Api
         [HttpGet]
         public object GetUsers()
         {
+            DateTime timestamp = DateTime.Now;
 			IEnumerable<User> availableUsers = _context.GetAvailableUsers(new DateTime());
             IEnumerable<User> users = _context.GetAll();
 
             var result = users.Select(u => {
-                Location loc = u.GetCurrentLocation();
+                Location loc = u.GetLocationAtTime(timestamp);
 
                 return new
                 {
                     name = u.FirstName + " " + u.LastName,
-                    isAvailable = u.IsAvailable(),
+                    isAvailable = u.IsAvailable(timestamp),
                     lat = loc.Latitude,
                     lon = loc.Longitude
                 };
