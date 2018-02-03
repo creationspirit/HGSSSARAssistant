@@ -347,9 +347,9 @@ namespace HGSSSARAssistant.DAL.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Day = table.Column<int>(nullable: false),
-                    EndTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<TimeSpan>(nullable: false),
                     LocationId = table.Column<long>(nullable: true),
-                    StartTime = table.Column<DateTime>(nullable: false),
+                    StartTime = table.Column<TimeSpan>(nullable: false),
                     UserId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

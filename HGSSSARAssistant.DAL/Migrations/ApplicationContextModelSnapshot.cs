@@ -70,11 +70,11 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<int>("Day");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<TimeSpan>("EndTime");
 
                     b.Property<long?>("LocationId");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<TimeSpan>("StartTime");
 
                     b.Property<long?>("UserId");
 

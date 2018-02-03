@@ -12,7 +12,7 @@ using System;
 namespace HGSSSARAssistant.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180126134520_InitialCreate")]
+    [Migration("20180203152256_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,11 +71,11 @@ namespace HGSSSARAssistant.DAL.Migrations
 
                     b.Property<int>("Day");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<TimeSpan>("EndTime");
 
                     b.Property<long?>("LocationId");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<TimeSpan>("StartTime");
 
                     b.Property<long?>("UserId");
 
