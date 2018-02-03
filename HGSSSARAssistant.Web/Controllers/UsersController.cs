@@ -164,6 +164,7 @@ namespace HGSSSARAssistant.Web.Controllers
                 title = a.Location.Description,
                 start = a.StartTime,
                 end = a.EndTime,
+                day = a.Day,
                 location = new {
                     lat = a.Location.Latitude,
                     lng = a.Location.Longitude

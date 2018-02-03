@@ -57,8 +57,8 @@
                 }
     
                 return {
-                    startTime: event.start.toISOString(),
-                    endTime: end.toISOString(),
+                    startTime: event.start.format('HH:mm:ss'),
+                    endTime: end.format('HH:mm:ss'),
                     day: event.start.day(),
                     location: {
                         description: event.location.description,
