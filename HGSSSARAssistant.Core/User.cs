@@ -22,23 +22,43 @@ namespace HGSSSARAssistant.Core
         public List<UserExpertise> UserExpertise { get; set; }
 
 
-        public bool IsAvailable(DateTime epoch) {
-            return this.GetCurrentAvailabilityPeriod(epoch) != null;
+        public bool IsAvailable(TimeSpan timeOfDay, Days day)
+        {
+            return this.GetCurrentAvailabilityPeriod(timeOfDay, day) != null;
         }
 
-        public Location GetLocationAtTime(DateTime epoch) {
-            Availability currentAvailability = this.GetCurrentAvailabilityPeriod(epoch);
-            if (currentAvailability != null) {
+        public bool IsAvailable(DateTime epoch)
+        {
+            return this.GetCurrentAvailabilityPeriod(epoch.TimeOfDay, (Days) epoch.DayOfWeek) != null;
+        }
+
+        public Location GetLocationAtTime(TimeSpan timeOfDay, Days day)
+        {
+            Availability currentAvailability = this.GetCurrentAvailabilityPeriod(timeOfDay, day);
+            if (currentAvailability != null)
+            {
                 return currentAvailability.Location;
-            } else {
-                return Address;
             }
+
+            return Address;
         }
 
-        private Availability GetCurrentAvailabilityPeriod(DateTime epoch) {
+
+        public Location GetLocationAtTime(DateTime epoch)
+        {
+            Availability currentAvailability = this.GetCurrentAvailabilityPeriod(epoch.TimeOfDay, (Days) epoch.DayOfWeek);
+            if (currentAvailability != null)
+            {
+                return currentAvailability.Location;
+            }
+
+            return Address;
+        }
+
+        private Availability GetCurrentAvailabilityPeriod(TimeSpan timeOfDay, Days day) {
             foreach (Availability a in this.Availiabilities)
             {
-                if (a.StartTime < epoch.TimeOfDay && a.EndTime > epoch.TimeOfDay && (int)a.Day == (int)epoch.DayOfWeek)
+                if (a.StartTime <= timeOfDay && a.EndTime >= timeOfDay && a.Day == day)
                 {
                     return a;
                 }

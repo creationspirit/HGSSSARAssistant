@@ -104,8 +104,8 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(4),
+                            StartTime = new TimeSpan(10, 0, 0),
+                            EndTime = new TimeSpan(20, 0, 0),
                             Location = new Location
                             {
                                 Id = 3,
@@ -180,8 +180,8 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(4),
+                            StartTime = new TimeSpan(10, 0, 0),
+                            EndTime = new TimeSpan(20, 0, 0),
                             Location = new Location
                             {
                                 Id = 3,
@@ -241,8 +241,8 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(4),
+                            StartTime = new TimeSpan(10, 0, 0),
+                            EndTime = new TimeSpan(20, 0, 0),
                             Location = new Location
                             {
                                 Id = 3,
@@ -331,8 +331,8 @@ namespace HGSSSARAssistant.IntegrationTests.Tests
                         {
                             Id = 1,
                             Day = Days.Mon,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddDays(4),
+                            StartTime = new TimeSpan(10, 0, 0),
+                            EndTime = new TimeSpan(20, 0, 0),
                             Location = new Location
                             {
                                 Id = 3,

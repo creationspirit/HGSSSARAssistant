@@ -6,8 +6,6 @@ namespace HGSSSARAssistant.UnitTests
 {
     public class AvailiabilityTest
     {
-
-        private DateTime _timeStamp = new DateTime(2018, 1, 15, 12, 35, 14);
         private readonly Availability _availability;
 
         public AvailiabilityTest()
@@ -15,8 +13,8 @@ namespace HGSSSARAssistant.UnitTests
             this._availability = new Availability
             {
                 Day = Days.Mon,
-                EndTime = _timeStamp.AddHours(2),
-                StartTime = _timeStamp.AddHours(-2),
+                StartTime = new TimeSpan(10, 0, 0),
+                EndTime = new TimeSpan(12, 0, 0),
                 Location = new Location
                 {
                     Description = "Location_1_Description",
@@ -34,61 +32,48 @@ namespace HGSSSARAssistant.UnitTests
             Assert.NotNull(this._availability);
         }
 
+
         [Fact]
-        public void ShouldNormalizeEndTimeCorrectlyForSameWeek()
+        public void ShouldAllowSettingEndOfDay()
         {
-            Assert.Equal(this._timeStamp.AddHours(2).Year, this._availability.EndTime.Year);
-            Assert.Equal(this._timeStamp.AddHours(2).Month, this._availability.EndTime.Month);
-            Assert.Equal(this._timeStamp.AddHours(2).Hour, this._availability.EndTime.Hour);
-            Assert.Equal(this._timeStamp.AddHours(2).Minute, this._availability.EndTime.Minute);
-            Assert.Equal((int)this._availability.Day, (int)this._availability.EndTime.DayOfWeek);
+            TimeSpan time = new TimeSpan(23, 59, 59);
+            this._availability.EndTime = time;
+            Assert.Equal(time, this._availability.EndTime);
         }
 
+
         [Fact]
-        public void ShouldNormalizeStartTimeCorrectlyForSameWeek()
+        public void ShouldAllowSettingStartOfDay()
         {
-            Assert.Equal(this._timeStamp.AddHours(-2).Year, this._availability.StartTime.Year);
-            Assert.Equal(this._timeStamp.AddHours(-2).Month, this._availability.StartTime.Month);
-            Assert.Equal(this._timeStamp.AddHours(-2).Hour, this._availability.StartTime.Hour);
-            Assert.Equal(this._timeStamp.AddHours(-2).Minute, this._availability.StartTime.Minute);
-            Assert.Equal((int)this._availability.Day, (int)this._availability.StartTime.DayOfWeek);
+            TimeSpan time = new TimeSpan(0, 0, 0);
+            this._availability.StartTime = time;
+            Assert.Equal(time, this._availability.StartTime);
         }
 
-        [Fact]
-        public void ShouldNormalizeEndTimeCorrectlyForDifferentWeek()
-        {
-            this._availability.EndTime = this._timeStamp.AddHours(2).AddDays(-20);
-
-            Assert.Equal(this._timeStamp.AddHours(2).Year, this._availability.EndTime.Year);
-            Assert.Equal(this._timeStamp.AddHours(2).Month, this._availability.EndTime.Month);
-            Assert.Equal(this._timeStamp.AddHours(2).Hour, this._availability.EndTime.Hour);
-            Assert.Equal(this._timeStamp.AddHours(2).Minute, this._availability.EndTime.Minute);
-            Assert.Equal((int)this._availability.Day, (int)this._availability.EndTime.DayOfWeek);
-        }
 
         [Fact]
-        public void ShouldNormalizeStartTimeCorrectlyForDifferentWeek()
+        public void ShouldAllowTimeSpanWithinADay()
         {
-            this._availability.StartTime = this._timeStamp.AddHours(-2).AddDays(-20);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                this._availability.StartTime = new TimeSpan(1, 0, 0, 0);
+            });
 
-            Assert.Equal(this._timeStamp.AddHours(-2).Year, this._availability.StartTime.Year);
-            Assert.Equal(this._timeStamp.AddHours(-2).Month, this._availability.StartTime.Month);
-            Assert.Equal(this._timeStamp.AddHours(-2).Hour, this._availability.StartTime.Hour);
-            Assert.Equal(this._timeStamp.AddHours(-2).Minute, this._availability.StartTime.Minute);
-            Assert.Equal((int)this._availability.Day, (int)this._availability.StartTime.DayOfWeek);
-        }
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                this._availability.StartTime = new TimeSpan(23, 59, 60);
+            });
 
-        [Fact]
-        public void ShouldNormalizeStartTimeCorrectlyForDifferentDay()
-        {
-            Days day = Days.Fri;
-            this._availability.Day = day;
 
-            Assert.Equal(this._timeStamp.AddHours(-2).Year, this._availability.StartTime.Year);
-            Assert.Equal(this._timeStamp.AddHours(-2).Month, this._availability.StartTime.Month);
-            Assert.Equal(this._timeStamp.AddHours(-2).Hour, this._availability.StartTime.Hour);
-            Assert.Equal(this._timeStamp.AddHours(-2).Minute, this._availability.StartTime.Minute);
-            Assert.Equal((int) day, (int)this._availability.StartTime.DayOfWeek);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                this._availability.EndTime = new TimeSpan(1, 0, 0, 0);
+            });
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                this._availability.EndTime = new TimeSpan(23, 59, 60);
+            });
         }
     }
 }

@@ -35,6 +35,7 @@ namespace HGSSSARAssistant.Web.Api
 
                 return new
                 {
+                    id = u.Id,
                     name = u.FirstName + " " + u.LastName,
                     isAvailable = u.IsAvailable(timestamp),
                     lat = loc.Latitude,

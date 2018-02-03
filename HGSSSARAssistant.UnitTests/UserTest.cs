@@ -55,10 +55,10 @@ namespace HGSSSARAssistant.UnitTests
                 },
                 Availiabilities = new List<Availability> {
                     new Availability {
-                        StartTime = DateTime.Now.AddHours(-1),
-                        EndTime = DateTime.Now.AddHours(1),
+                        StartTime = new TimeSpan(11, 0, 0),
+                        EndTime = new TimeSpan(12, 0, 0),
                         Location = this._testLocation2,
-                        Day = (Days) DateTime.Now.DayOfWeek,
+                        Day = Days.Mon,
                         Id = 1
                     }
                 }
@@ -77,9 +77,9 @@ namespace HGSSSARAssistant.UnitTests
             availabilities.Add(new Availability
             {
 				Id = 1,
-                Day = (Days) DateTime.Now.DayOfWeek,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
+                Day = Days.Mon,
+                StartTime = new TimeSpan(10, 0, 0),
+                EndTime = new TimeSpan(12, 0, 0),
                 Location = new Location {
                     Id = 1,
                     Description = "Desc",
@@ -98,27 +98,31 @@ namespace HGSSSARAssistant.UnitTests
         [Fact]
         public void ShouldBeAvailable()
         {
-            Assert.True(this._user.IsAvailable());
+            Assert.True(this._user.IsAvailable(new TimeSpan(11, 0, 0), Days.Mon));
         }
 
         [Fact]
-        public void ShouldBeUnavailable()
+        public void ShouldBeUnavailableOnDifferentDay()
         {
-            this._user.Availiabilities[0].EndTime = DateTime.Now.AddHours(-5);
-            Assert.False(this._user.IsAvailable());
+            Assert.False(this._user.IsAvailable(new TimeSpan(9, 0, 0), Days.Tue));
+        }
+
+        [Fact]
+        public void ShouldBeUnavailableAtDifferentTime()
+        {
+            Assert.False(this._user.IsAvailable(new TimeSpan(21, 0, 0), Days.Mon));
         }
 
         [Fact]
         public void ShouldBeAtHomeIfUnavailable()
         {
-            this._user.Availiabilities[0].EndTime = DateTime.Now.AddHours(-5);
-            Assert.Equal(this._user.Address, this._user.GetCurrentLocation());
+            Assert.Equal(this._user.Address, this._user.GetLocationAtTime(new TimeSpan(21, 0, 0), Days.Tue));
         }
 
         [Fact]
         public void ShouldBeAtLocationIfAvailable()
         {
-            Assert.Equal(this._user.Availiabilities[0].Location, this._user.GetCurrentLocation());
+            Assert.Equal(this._user.Availiabilities[0].Location, this._user.GetLocationAtTime(new TimeSpan(11, 0, 0), Days.Mon));
         }
     }
 }

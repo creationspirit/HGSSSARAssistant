@@ -20,8 +20,9 @@ namespace HGSSSARAssistant.Core
             }
             set
             {
-                if (value >= endTime) {
-                    throw new InvalidOperationException("Availability period cannot begin before it has ended.");
+                if (value >= new TimeSpan(24, 0, 0) || value < new TimeSpan(0, 0, 0))
+                {
+                    throw new InvalidOperationException("Availability period should be contained within one day.");
                 }
                 startTime = value;
             }
@@ -36,9 +37,9 @@ namespace HGSSSARAssistant.Core
             }
             set
             {
-                if (value <= startTime)
+                if (value >= new TimeSpan(24, 0, 0) || value < new TimeSpan(0, 0, 0))
                 {
-                    throw new InvalidOperationException("Availability period cannot end before it has begun.");
+                    throw new InvalidOperationException("Availability period should be contained within one day.");
                 }
                 endTime = value;
             }
