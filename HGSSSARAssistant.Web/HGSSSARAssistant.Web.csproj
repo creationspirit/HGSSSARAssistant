@@ -21,4 +21,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HGSSSARAssistant.DAL\HGSSSARAssistant.DAL.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Actions\Create.cshtml" />
+    <Content Remove="Views\Actions\Edit.cshtml" />
+  </ItemGroup>
 </Project>

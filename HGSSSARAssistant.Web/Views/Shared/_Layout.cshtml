@@ -33,11 +33,6 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">HGSS - SARAssistant</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="ActionTypes" asp-action="Index">Action Types</a></li>
-                    <li><a asp-area="" asp-controller="MessageTemplates" asp-action="Index">Message Templates</a></li>
-                    <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
-                </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>

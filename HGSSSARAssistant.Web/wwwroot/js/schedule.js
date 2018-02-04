@@ -154,12 +154,19 @@ if (userId) {
             hour: startTimeParts[0],
             minute: startTimeParts[1],
             second: startTimeParts[2]
-        }).day(e.day);
+        });;
         e.end = moment().set({
             hour: endTimeParts[0],
             minute: endTimeParts[1],
             second: endTimeParts[2]
-        }).day(e.day);
+        });
+        if (e.day > 1) {
+            e.start.isoWeekday(e.day);
+            e.end.isoWeekday(e.day);
+        } else {
+            e.start.day(e.day);
+            e.end.day(e.day);
+        }
         return e;
       });
     }).then(initCalendar)

@@ -70,7 +70,6 @@ namespace HGSSSARAssistant.DAL.EF
 
                 action.HasOne(a => a.Location);
                 action.HasOne(a => a.Leader);
-
                 action.HasMany(a => a.InvitedRescuers)
                     .WithOne();
                 action.HasMany(a => a.AttendedRescuers)
@@ -84,6 +83,7 @@ namespace HGSSSARAssistant.DAL.EF
                 availability.Property(a => a.EndTime).IsRequired();
                 availability.HasOne(a => a.Location);
                 availability.Property(a => a.Day);
+                
             });
 
             modelBuilder.Entity<HGSSSARAssistant.Core.Station>(station =>

@@ -64,3 +64,20 @@
 .media .media-object {
     max-width: 48px;
 }
+
+#calendar > div.fc-view-container > div > table > tbody > tr > td > div {
+    height: auto !important;
+}
+/* bs overrides */
+.navbar.navbar-inverse {
+    background-color: #3F51B5;
+    border-bottom: 0;
+    box-shadow: 0 4px 0px #3F51B5
+
+}
+
+    .navbar.navbar-inverse *,
+    .navbar-inverse .navbar-nav > li > a {
+        color: #E8EAF6
+    }
+
