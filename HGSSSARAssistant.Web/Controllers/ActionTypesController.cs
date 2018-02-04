@@ -6,41 +6,48 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
+using HGSSSARAssistant.Core.Repositories;
 using HGSSSARAssistant.DAL.EF;
+using HGSSSARAssistant.DAL;
+using HGSSSARAssistant.Web.Models;
 
 namespace HGSSSARAssistant.Web.Controllers
 {
     public class ActionTypesController : Controller
     {
-        private readonly ApplicationContext _context;
+        private readonly IActionTypeRepository _context;
 
-        public ActionTypesController(ApplicationContext context)
+        public ActionTypesController(IActionTypeRepository context)
         {
             _context = context;
         }
 
         // GET: ActionTypes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.ActionTypes.ToListAsync());
+            List<ActionTypeViewModel> model = new List<ActionTypeViewModel>();
+            foreach (ActionType at in _context.GetAll())
+            {
+                ActionTypeViewModel actionModel = ConvertToViewModel(at);
+                model.Add(actionModel);
+            }
+
+            return View(model);
         }
 
         // GET: ActionTypes/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public ActionResult Details(long id)
         {
-            if (id == null)
+            var action = _context.GetById(id);
+
+            if (action == null)
             {
                 return NotFound();
             }
 
-            var actionType = await _context.ActionTypes
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (actionType == null)
-            {
-                return NotFound();
-            }
+            var actionTypeModel = ConvertToViewModel(action);
 
-            return View(actionType);
+            return View(actionTypeModel);
         }
 
         // GET: ActionTypes/Create
@@ -54,31 +61,34 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id")] ActionType actionType)
+        public ActionResult Create([Bind("Name,Id")] ActionTypeViewModel actionTypeModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(actionType);
-                await _context.SaveChangesAsync();
+                var action = ConvertToModel(actionTypeModel);
+
+                _context.Insert(action);
+                _context.Save();
                 return RedirectToAction(nameof(Index));
             }
-            return View(actionType);
+
+            ModelState.AddModelError("", "Invalid action type data.");
+            return View(actionTypeModel);
         }
 
         // GET: ActionTypes/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        public ActionResult Edit(long id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var actionType = _context.GetById(id);
 
-            var actionType = await _context.ActionTypes.SingleOrDefaultAsync(m => m.Id == id);
             if (actionType == null)
             {
                 return NotFound();
             }
-            return View(actionType);
+
+            ActionTypeViewModel actionModel = ConvertToViewModel(actionType);
+
+            return View(actionModel);
         }
 
         // POST: ActionTypes/Edit/5
@@ -86,9 +96,9 @@ namespace HGSSSARAssistant.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Name,Id")] ActionType actionType)
+        public ActionResult Edit(long id, [Bind("Name,Id")] ActionTypeViewModel actionTypeModel)
         {
-            if (id != actionType.Id)
+            if (id != actionTypeModel.Id)
             {
                 return NotFound();
             }
@@ -97,12 +107,14 @@ namespace HGSSSARAssistant.Web.Controllers
             {
                 try
                 {
-                    _context.Update(actionType);
-                    await _context.SaveChangesAsync();
+                    var action = ConvertToModel(actionTypeModel);
+
+                    _context.Update(action);
+                    _context.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActionTypeExists(actionType.Id))
+                    if (!this._context.Exists(actionTypeModel.Id))
                     {
                         return NotFound();
                     }
@@ -113,41 +125,54 @@ namespace HGSSSARAssistant.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(actionType);
+            return View(actionTypeModel);
         }
 
         // GET: ActionTypes/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        public ActionResult Delete(long id)
         {
-            if (id == null)
+            var action = _context.GetById(id);
+
+            if (action == null)
             {
                 return NotFound();
             }
 
-            var actionType = await _context.ActionTypes
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (actionType == null)
-            {
-                return NotFound();
-            }
+            ActionTypeViewModel actionModel = ConvertToViewModel(action);
 
-            return View(actionType);
+            return View(actionModel);
         }
 
         // POST: ActionTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public ActionResult DeleteConfirmed(long id)
         {
-            var actionType = await _context.ActionTypes.SingleOrDefaultAsync(m => m.Id == id);
-            _context.ActionTypes.Remove(actionType);
-            await _context.SaveChangesAsync();
+            _context.Delete(id);
+            _context.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ActionTypeExists(long id)
+        private ActionType ConvertToModel(ActionTypeViewModel actionModel)
         {
-            return _context.ActionTypes.Any(e => e.Id == id);
+            ActionType action = new ActionType
+            {
+                Id = actionModel.Id,
+                Name = actionModel.Name
+            };
+
+            return action;
+        }
+
+        private ActionTypeViewModel ConvertToViewModel(ActionType action)
+        {
+            var actionModel = new ActionTypeViewModel
+            {
+                Id = action.Id,
+                Name = action.Name
+            };
+
+            return actionModel;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace HGSSSARAssistant.Web.Api
         public object GetUsers()
         {
             DateTime timestamp = DateTime.Now;
-			IEnumerable<User> availableUsers = _context.GetAvailableUsers(new DateTime());
+            IEnumerable<User> availableUsers = _context.GetAvailableUsers(new DateTime());
             IEnumerable<User> users = _context.GetAll();
 
             var result = users.Select(u => {
@@ -47,21 +47,24 @@ namespace HGSSSARAssistant.Web.Api
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public ActionResult GetUser([FromRoute] long id)
+        public object GetUser([FromRoute] long id)
         {
-            if (!ModelState.IsValid)
+            DateTime timestamp = DateTime.Now;
+            User user = _context.GetById(id);
+
+            Location loc = user.GetLocationAtTime(timestamp);
+
+            return new
             {
-                return BadRequest(ModelState);
-            }
-
-            var user = _context.GetById(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
+                id = user.Id,
+                name = user.FirstName + " " + user.LastName,
+                isAvailable = user.IsAvailable(timestamp),
+                address = loc.Name,
+                contactNumber = user.ContactNumber,
+                secondaryContactNumber = user.AdditionalContactNumbers,
+                lat = loc.Latitude,
+                lon = loc.Longitude
+            };
         }
 
         // PUT: api/Users/5
