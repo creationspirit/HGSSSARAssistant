@@ -58,6 +58,7 @@ namespace HGSSSARAssistant.Web.Api
             {
                 id = user.Id,
                 name = user.FirstName + " " + user.LastName,
+                category = user.Category.Name,
                 isAvailable = user.IsAvailable(timestamp),
                 address = loc.Name,
                 contactNumber = user.ContactNumber,

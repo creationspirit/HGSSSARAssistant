@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HGSSSARAssistant.Core;
 using HGSSSARAssistant.DAL.EF;
 using HGSSSARAssistant.Web.Services;
+using HGSSSARAssistant.Core.Repositories;
 
 namespace HGSSSARAssistant.Web.Api
 {
@@ -15,10 +16,10 @@ namespace HGSSSARAssistant.Web.Api
     [Route("api/Actions")]
     public class ActionsController : Controller
     {
-        private readonly ApplicationContext _context;
+        private readonly IActionRepository _context;
         private readonly IActionNotifier _notifier;
 
-        public ActionsController(ApplicationContext context, ActionPushNotifier notifier)
+        public ActionsController(IActionRepository context, IActionNotifier notifier)
         {
             _context = context;
             _notifier = notifier;
@@ -26,21 +27,42 @@ namespace HGSSSARAssistant.Web.Api
 
         // GET: api/Actions
         [HttpGet]
-        public IEnumerable<Core.Action> GetActions()
+        public object GetActions()
         {
-            return _context.Actions;
+            IEnumerable<Core.Action> actions = _context.GetAll();
+
+            var result = actions.Select(a => {
+                bool isActive = a.ActionType.Name == "Active";
+
+                return new
+                {
+                    id = a.Id,
+                    name = a.Name, 
+					description = a.Description,
+                    active = isActive,
+                    meetupTime = a.MeetupTime,
+                    leaderId = a.Leader.Id,
+                    location = new {
+                        lat = a.Location.Latitude,
+                        lng = a.Location.Longitude
+                    },
+                    invitedRescuers = a.InvitedRescuers.Select(r => r.Id),
+                    attendingRescuers = a.AttendedRescuers.Select(r => r.Id),
+                };
+            });
+            return result;
         }
 
         // GET: api/Actions/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAction([FromRoute] long id)
+        public ActionResult GetAction([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
+            var action = _context.GetById(id);
 
             if (action == null)
             {
@@ -52,7 +74,7 @@ namespace HGSSSARAssistant.Web.Api
 
         // PUT: api/Actions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAction([FromRoute] long id, [FromBody] Core.Action action)
+        public ActionResult PutAction([FromRoute] long id, [FromBody] Core.Action action)
         {
             if (!ModelState.IsValid)
             {
@@ -64,11 +86,9 @@ namespace HGSSSARAssistant.Web.Api
                 return BadRequest();
             }
 
-            _context.Entry(action).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _context.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -87,15 +107,15 @@ namespace HGSSSARAssistant.Web.Api
 
         // POST: api/Actions
         [HttpPost]
-        public async Task<IActionResult> PostAction([FromBody] Core.Action action)
+        public ActionResult PostAction([FromBody] Core.Action action)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Actions.Add(action);
-            await _context.SaveChangesAsync();
+            _context.Insert(action);
+            _context.Save();
             foreach(User u in action.InvitedRescuers) {
                 try {
 					this._notifier.SendNotification(u, "");
@@ -108,28 +128,27 @@ namespace HGSSSARAssistant.Web.Api
 
         // DELETE: api/Actions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAction([FromRoute] long id)
+        public ActionResult DeleteAction([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var action = await _context.Actions.SingleOrDefaultAsync(m => m.Id == id);
-            if (action == null)
+            if (!_context.Exists(id))
             {
                 return NotFound();
             }
 
-            _context.Actions.Remove(action);
-            await _context.SaveChangesAsync();
+            _context.Delete(id);
+            _context.Save();
 
-            return Ok(action);
+            return Ok();
         }
 
         private bool ActionExists(long id)
         {
-            return _context.Actions.Any(e => e.Id == id);
+            return _context.Exists(id);
         }
     }
 }

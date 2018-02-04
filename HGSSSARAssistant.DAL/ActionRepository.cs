@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace HGSSSARAssistant.DAL
 {
@@ -30,9 +31,24 @@ namespace HGSSSARAssistant.DAL
             _context.Dispose();
         }
 
+        public override Core.Action GetById(long Id)
+        {
+            return _actionEntity.SingleOrDefault(u => u.Id == Id);
+        }
+
+        public override IEnumerable<Core.Action> GetAll()
+        {
+            return _actionEntity.AsEnumerable();
+        }
+
         public Core.Action GetActionByName(string name)
         {
             return _actionEntity.SingleOrDefault(a => a.Name.Equals(name));
+        }
+
+        public Core.Action GetActionByType(ActionType actionType)
+        {
+            return _actionEntity.SingleOrDefault(a => a.ActionType.Equals(actionType));
         }
     }
 }
