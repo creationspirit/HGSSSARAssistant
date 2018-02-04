@@ -37,11 +37,14 @@ namespace HGSSSARAssistant.Web.Api
                 return new
                 {
                     id = a.Id,
-                    name = a.Name, 
-					description = a.Description,
+                    name = a.Name,
+					          description = a.Description,
                     active = isActive,
                     meetupTime = a.MeetupTime,
-                    leaderId = a.Leader.Id,
+                    leader = new {
+                      id = a.Leader.Id,
+                      name = a.Leader.FirstName + " " + a.Leader.LastName,
+                    },
                     location = new {
                         lat = a.Location.Latitude,
                         lng = a.Location.Longitude
