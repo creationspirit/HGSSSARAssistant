@@ -12,6 +12,7 @@ using HGSSSARAssistant.Web.Services;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace HGSSSARAssistant.Web
 {
@@ -51,6 +52,11 @@ namespace HGSSSARAssistant.Web
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddTransient<IActionNotifier, ActionPushNotifier>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "SAR Assistant API", Version = "v1" });
+            });
         }
 
         public void ConfigureTestServices(IServiceCollection services)
@@ -106,6 +112,16 @@ namespace HGSSSARAssistant.Web
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(null);
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
 
             app.UseMvc(routes =>
             {
