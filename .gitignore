@@ -266,3 +266,14 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
+
+
+/ANDROID/SARAssistant/*.iml
+/ANDROID/SARAssistant/.gradle
+/ANDROID/SARAssistant/local.properties
+/ANDROID/SARAssistant/.idea/workspace.xml
+/ANDROID/SARAssistant/.idea/libraries
+/ANDROID/SARAssistant/.DS_Store
+/ANDROID/SARAssistant/build
+/ANDROID/SARAssistant/captures
+/ANDROID/SARAssistant/.externalNativeBuild
